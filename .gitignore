@@ -1,0 +1,5 @@
+# Secrets
+.streamlit/
+
+# temporaray login related
+sign_up.py
