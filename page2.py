@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 from supabase import create_client, Client
+from helper import diagnosis_draft
 
 # Supabase 연결 설정
 @st.cache_resource
@@ -20,6 +21,20 @@ def run_related_query():
     category = supabase.table("diagnosis_1st").select("*").execute()
     return doctor, category
 
+def pick_patient_info(patient_info):
+    name = patient_info["patient_name"]
+    gender = patient_info["gender"]
+    birthday = patient_info["birth_date"]
+    age = datetime.now().year - birthday.year - ((datetime.now().month, datetime.now().day) < (birthday.month, birthday.day))
+    eye = patient_info["surgery_eye"]
+    cats = patient_info["category"]
+    detail = patient_info["diagnosis"]
+
+    msg = f"""환자의 정보는 다음과 같습니다.
+    이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {cats} / {detail}"""
+    return msg
+
+
 # 환자 정보 등록
 def page_input():    
     st.write("# :male-doctor: 환자 정보 등록")
@@ -30,7 +45,7 @@ def page_input():
 
     # 환자 등록이 완료된 경우, 등록된 정보를 보여준다.
     if st.session_state['patient_info']:
-
+        colp_1, colp_2 = st.columns(2)
         patient_data = {
             "항목": ["환자 번호", "이름", "성별", "생년월일", "주치의", "수술 부위", "수술 날짜", "수술 시간", "1차 소견", "2차소견"],
             "정보": [
@@ -47,13 +62,22 @@ def page_input():
             ]
         }
         df_patient_info = pd.DataFrame(patient_data)
-        st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+        with colp_2:
+            st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
         
         # 야래쪽에는 등록된 정보에 기반하여, 상세 소견을 DB에서 검색하여 보여준다.
         res = supabase.table("diagnosis_2nd").select("explain").eq("name", st.session_state['patient_info']['diagnosis']).execute()
         explain = res.data[0]['explain']
-        st.text_area("**환자 상태에 관한 상세 소견**",
-                     explain, height=200)
+        
+        if explain == 'undefined':
+            info = pick_patient_info(st.session_state['patient_info'])
+            msg = {"role": "user", "content": info}
+            explain = diagnosis_draft(msg)
+        with colp_1:
+            st.markdown("**환자 상태에 관한 상세 소견**")
+            st.markdown(explain)
+        # st.text_area("**환자 상태에 관한 상세 소견**",
+        #              explain, height=200)
 
         # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
         if st.button("환자 정보 재등록"):
