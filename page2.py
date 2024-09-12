@@ -18,8 +18,7 @@ supabase = init_connection()
 def run_related_query():
     doctor = supabase.table("doctor").select("*").execute()
     category = supabase.table("diagnosis_1st").select("*").execute()
-    diagnosis = supabase.table("diagnosis_2nd").select("*").execute()
-    return doctor, category, diagnosis
+    return doctor, category
 
 # 환자 정보 등록
 def page_input():    
@@ -29,6 +28,7 @@ def page_input():
     if 'patient_info' not in st.session_state:
         st.session_state['patient_info'] = None
 
+    # 환자 등록이 완료된 경우, 등록된 정보를 보여준다.
     if st.session_state['patient_info']:
 
         patient_data = {
@@ -48,28 +48,30 @@ def page_input():
         }
         df_patient_info = pd.DataFrame(patient_data)
         st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
-        # st.table(patient_data)
+        
+        # 야래쪽에는 등록된 정보에 기반하여, 상세 소견을 DB에서 검색하여 보여준다.
         res = supabase.table("diagnosis_2nd").select("explain").eq("name", st.session_state['patient_info']['diagnosis']).execute()
         explain = res.data[0]['explain']
         st.text_area("**환자 상태에 관한 상세 소견**",
                      explain, height=200)
 
-        # 리셋 버튼
+        # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
         if st.button("환자 정보 재등록"):
             reset_info()
 
+    # 새로운 환자 정보를 등록한다.
     else:
         input_patient_info()
-    
-    
+
+# 새로운 환자 정보 입력을 위한 리셋    
 def reset_info():
         st.session_state['patient_info'] = None
         st.rerun()
 
+# 환자 정보 등록 과정
 def input_patient_info():
     
-    # 임시로 필요한 전처리 수행
-    doctors, categories, _ = run_related_query()
+    doctors, categories = run_related_query()
     df_docs = pd.DataFrame(doctors.data)
     docs_lst = df_docs['name'].tolist()
     docs_lst.insert(0, '<선택>')
