@@ -70,9 +70,14 @@ def page_input():
         explain = res.data[0]['explain']
         
         if explain == 'undefined':
-            info = pick_patient_info(st.session_state['patient_info'])
-            msg = {"role": "user", "content": info}
-            explain = diagnosis_draft(msg)
+            if 'explain' not in st.session_state['patient_info']:
+                info = pick_patient_info(st.session_state['patient_info'])
+                msg = {"role": "user", "content": info}
+                explain = diagnosis_draft(msg)
+                st.session_state['patient_info']['explain'] = explain
+            else:
+                explain = st.session_state['patient_info']['explain']
+
         with colp_1:
             st.markdown("**환자 상태에 관한 상세 소견**")
             st.markdown(explain)
