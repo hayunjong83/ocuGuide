@@ -40,6 +40,128 @@ def page_input():
     st.write("# :male-doctor: 환자 정보 등록")
     st.sidebar.success("환자별 맞춤 안내를 제공합니다.")
 
+    # 소견 분류 상세 내용
+    categories = {1: '전안부', 2:'각막', 3:'전방', 4:'수정체', 5:'망막', 6:'시신경'}
+    category_details = {
+        '전안부': ["안검염(마이봄샘 기능장애 포함)", "건성안"], 
+        '각막': ["내피세포 이상 1200개 미만", "1200~1500개", "각막혼탁","기타각막질환"], 
+        '전방': ["얕은 전방", "산동 저하", "소대 이상", "급성폐쇄각녹내장", "거짓비닐증후군", "외상"],
+        '수정체': ["심한 백내장(백색, 갈색, 후낭하혼탁 포함)", "안저검사 불가"],
+        '망막': ["망막질환 (황반변성, 당뇨망막병증 등)"],
+        '시신경': ["녹내장", "뇌병변으로 인한 시야장애"]}
+
+    # 환자의 소견 정보 저장
+    diagnosis = {}
+
+    with st.container(border=True):
+        st.subheader("환자의 소견 정보")
+        # 분류 1 : '전안부': ["안검염(마이봄샘 기능장애 포함)", "건성안"]
+        with st.container(border=True):
+            cat1_title, cat1_cotent = st.columns([1, 5])
+            with cat1_title:
+                st.write("#### 전안부")
+            selelcted_cats = []
+            with cat1_cotent:
+                cat1_1, cat1_2 = st.columns([2, 1])
+                with cat1_1:
+                    if st.checkbox("안검염(마이봄샘 기능장애 포함)", key=1_1):
+                        selelcted_cats.append("안검염(마이봄샘 기능장애 포함)")
+                with cat1_2:
+                    if st.checkbox("건성안", key=1_2):
+                        selelcted_cats.append("건성안")
+            diagnosis["전안부"] = selelcted_cats
+
+        # 분류 2 : '각막': ["내피세포 이상 1200개 미만", "1200~1500개", "각막혼탁","기타각막질환"],
+        with st.container(border=True):
+            cat2_title, cat2_cotent = st.columns([1, 5])
+            with cat2_title:
+                st.write("#### 각막")
+            selelcted_cats = []
+            with cat2_cotent:
+                cat2_1, cat2_2 = st.columns([2, 1])
+                with cat2_1:
+                    if st.checkbox("내피세포 이상 1200개 미만", key=2_1):
+                        selelcted_cats.append("내피세포 이상 1200개 미만")
+                with cat2_2:
+                    if st.checkbox("1200~1500개", key=2_2):
+                        selelcted_cats.append("1200~1500개")
+                cat2_1_u, cat2_2_u = st.columns([2, 1])
+                with cat2_1_u:
+                    if st.checkbox("각막혼탁", key=2_3):
+                        selelcted_cats.append("각막혼탁")
+                with cat2_2_u:
+                    if st.checkbox("기타각막질환", key=2_4):
+                        selelcted_cats.append("기타각막질환")
+            diagnosis["각막"] = selelcted_cats
+        # 분류 3 : '전방': ["얕은 전방", "산동 저하", "소대 이상", "급성폐쇄각녹내장", "거짓비닐증후군", "외상"]
+        with st.container(border=True):
+            cat3_title, cat3_cotent = st.columns([1, 5])
+            with cat3_title:
+                st.write("#### 전방")
+            selelcted_cats = []
+            with cat3_cotent:
+                cat3_1, cat3_2, cat3_3 = st.columns([1, 1, 1])
+                with cat3_1:
+                    if st.checkbox("얕은 전방", key=3_1):
+                        selelcted_cats.append("얕은 전방")
+                with cat3_2:
+                    if st.checkbox("산동 저하", key=3_2):
+                        selelcted_cats.append("산동 저하")
+                with cat3_3:
+                    if st.checkbox("소대 이상", key=3_3):
+                        selelcted_cats.append("소대 이상")
+                cat3_1_u, cat3_2_u, cat3_3_u = st.columns([1, 1, 1])
+                with cat3_1_u:
+                    if st.checkbox("급성폐쇄각녹내장", key=3_4):
+                        selelcted_cats.append("급성폐쇄각녹내장")
+                with cat3_2_u:
+                    if st.checkbox("거짓비닐증후군", key=3_5):
+                        selelcted_cats.append("거짓비닐증후군")
+                with cat3_3_u:
+                    if st.checkbox("외상", key=3_6):
+                        selelcted_cats.append("외상")
+            diagnosis["전방"] = selelcted_cats
+        # 분류 4 : '수정체': ["심한 백내장(백색, 갈색, 후낭하혼탁 포함)", "안저검사 불가"]
+        with st.container(border=True):
+            cat4_title, cat4_cotent = st.columns([1, 5])
+            selelcted_cats = []
+            with cat4_title:
+                st.write("#### 수정체")
+            with cat4_cotent:
+                cat4_1, cat4_2 = st.columns([2, 1])
+                with cat4_1:
+                    if st.checkbox("심한 백내장(백색, 갈색, 후낭하혼탁 포함)", key=4_1):
+                        selelcted_cats.append("심한 백내장(백색, 갈색, 후낭하혼탁 포함)")
+                with cat4_2:
+                    if st.checkbox("안저검사 불가", key=4_2):
+                        selelcted_cats.append("안저검사 불가")
+            diagnosis["수정체"] = selelcted_cats
+        # 분류 5 : '망막': ["망막질환 (황반변성, 당뇨망막병증 등)"]
+        with st.container(border=True):
+            cat5_title, cat5_cotent = st.columns([1, 5])
+            with cat5_title:
+                st.write("#### 망막")
+            selelcted_cats = []
+            with cat5_cotent:
+                if st.checkbox("망막질환(황반변성, 당뇨망막병증 등)", key=5_1):
+                    selelcted_cats.append("망막질환(황반변성, 당뇨망막병증 등)")
+            diagnosis["망막"] = selelcted_cats
+        # 분류 6 :'시신경': ["녹내장", "뇌병변으로 인한 시야장애"]
+        with st.container(border=True):
+            cat6_title, cat6_cotent = st.columns([1, 5])
+            with cat6_title:
+                st.write("#### 시신경")
+            selelcted_cats = []
+            with cat6_cotent:
+                cat6_1, cat6_2 = st.columns([1, 2])
+                with cat6_1:
+                    if st.checkbox("녹내장", key=6_1):
+                        selelcted_cats.append("녹내장")
+                with cat6_2:
+                    if st.checkbox("뇌병변으로 인한 시야장애", key=6_2):
+                        selelcted_cats.append("뇌병변으로 인한 시야장애")
+            diagnosis["시신경"] = selelcted_cats
+
     if 'patient_info' not in st.session_state:
         st.session_state['patient_info'] = None
 
