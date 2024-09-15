@@ -1,25 +1,29 @@
 import streamlit as st
 
 def page_home():
-    
-    st.write("# 세브란스 OcuGUIDE :eye-in-speech-bubble:")
+        
+    st.write("# :green[백내장 길라잡이] OcuGUIDE :eye-in-speech-bubble:")
 
     st.sidebar.success("필요한 단계를 위에서 선택하세요.")
 
-    st.markdown(
-        """
-        세브란스 안과병원의 **OcuGuide**에서는 백내장에 관한 정보와 수술을 환자분들께 안내합니다.
-        현재 페이지는 *OcuGuide*를 위한 테스트 페이지로서,
-        **환자 정보 입력**, **백내장 수술 정보 안내**, **Q&A 챗봇** 등의 기능을 수행합니다.
-        **👈 좌측 메뉴에서 원하는 기능을 선택하여** 진행하십시오.
-        
-        ### 현재 제공 기능 설명
-        - 👨‍⚕️ **환자정보 등록** : 환자의 백내장 수슬 전 검사 결과를 등록합니다.
-        - ℹ️ **백내장수술 정보** : 수술 전 환자에게 안내할 백내장 관련 정보
-        - ❔ **Q&A 챗봇** : 수술 전 동의를 받기 전에, 환자의 질문에 응대하는 LLM 챗봇
-
-        ### 구현 예정 기능
-        - ✔️ **환자의 질문-응답 요약** : 주치의가 확인할 수 있느 환자의 질문 요약 및 검토
-        - ❕ **Q&A 통계** : 환자가 자주 물어본 질문과 정보에 대한 통계 제공
-    """
-    )
+    st.subheader("OcuGuide에 오신 것을 환영합니다.")
+    st.markdown("""
+                **OcuGuide :eye-in-speech-bubble:는 :blue[세브란스] 안과 전문 의료진과 함께 백내장 수술에 대한 맞춤형 정보를 제공하여, 환자분들의 건강과 회복을 돕기 위한 서비스입니다.**
+                이곳에서 제공하는 자료와 맞춤형 정보로 백내장 수술을 준비하고, 궁금한 사항에 대해 자유롭게 문의하세요.
+                """)
+    st.subheader("OcuGuide의 주요 기능")
+    st.write("""
+         - ✔️ **환자 맞춤형 정보 제공**: 초기 검사 결과를 기반으로 환자 개개인에게 맞춤형 정보를 제공합니다.
+         - ℹ️  **수술 안내 정보**: 백내장 수술 과정과 주의사항에 대해 단계별로 안내합니다.
+         - ❔ **전문 의료진과의 소통**: 챗봇을 통해 궁금한 사항에 대해 신속하게 답변을 받을 수 있습니다.
+         """)
+    st.subheader("최고의 의료 지식과 경험")
+    st.write("""
+    [세브란스 안과병원](https://sev-eye.severance.healthcare/sev-eye/index.do)은 최신 의료 지식과 최고의 수술 경험을 바탕으로 환자들에게 신뢰할 수 있는 정보를 제공합니다.
+    """)
+    col1, col2 = st.columns(2)
+    with col2:
+        st.image("./ref/sev-eye_logo@2x.png")
+    with col1:
+        st.image("./ref/ocuguide_logo@2x.png")    
+    st.markdown("---")
