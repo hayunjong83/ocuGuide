@@ -88,11 +88,6 @@ def page_input():
         if st.button("환자 정보 재등록"):
             reset_info()
 
-        res = supabase.table("diagnosis").select("explain").eq("diag", "안검염(마이봄샘 기능장애 포함)").execute()
-        raw = res.data[0]['explain']
-        raw = raw.replace("{patient}", st.session_state['patient_info']['patient_name'])
-        st.write(raw)
-
     # 새로운 환자 정보를 등록한다.
     else:
         input_patient_info()
