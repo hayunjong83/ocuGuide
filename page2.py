@@ -18,8 +18,8 @@ supabase = init_connection()
 @st.cache_resource(ttl=600)
 def run_related_query():
     doctor = supabase.table("doctor").select("*").execute()
-    category = supabase.table("diagnosis_1st").select("*").execute()
-    return doctor, category
+    # category = supabase.table("diagnosis_1st").select("*").execute()
+    return doctor
 
 def pick_patient_info(patient_info):
     name = patient_info["patient_name"]
@@ -40,12 +40,83 @@ def page_input():
     st.write("# :male-doctor: 환자 정보 등록")
     st.sidebar.success("환자별 맞춤 안내를 제공합니다.")
 
+    # 세션에 환자 정보 저장 키 여부 확인
+    if 'patient_info' not in st.session_state:
+        st.session_state['patient_info'] = None
+
+    # 환자 등록이 완료된 경우, 등록된 정보를 보여준다.
+    if st.session_state['patient_info']:
+        colp_1, colp_2 = st.columns(2)
+        patient_data = {
+            "항목": ["환자 번호", "이름", "성별", "생년월일", "주치의", "수술 부위", "수술 날짜", "수술 시간"],
+            "정보": [
+                st.session_state['patient_info']['patient_number'],
+                st.session_state['patient_info']['patient_name'],
+                st.session_state['patient_info']['gender'],
+                st.session_state['patient_info']['birth_date'],
+                st.session_state['patient_info']['primary_doctor'],
+                st.session_state['patient_info']['surgery_eye'],
+                st.session_state['patient_info']['surgery_date'],
+                st.session_state['patient_info']['surgery_time'],
+                # st.session_state['patient_info']['diagnosis']
+            ]
+        }
+        df_patient_info = pd.DataFrame(patient_data)
+        with colp_2:
+            st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+        
+        # 야래쪽에는 등록된 정보에 기반하여, 상세 소견을 DB에서 검색하여 보여준다.
+        # res = supabase.table("diagnosis_2nd").select("explain").eq("name", st.session_state['patient_info']['diagnosis']).execute()
+        # explain = res.data[0]['explain']
+        
+        # if explain == 'undefined':
+        #     if 'explain' not in st.session_state['patient_info']:
+        #         info = pick_patient_info(st.session_state['patient_info'])
+        #         msg = {"role": "user", "content": info}
+        #         explain = diagnosis_draft(msg)
+        #         st.session_state['patient_info']['explain'] = explain
+        #     else:
+        #         explain = st.session_state['patient_info']['explain']
+
+        # with colp_1:
+        #     st.markdown("**환자 상태에 관한 상세 소견**")
+        #     st.markdown(explain)
+        # st.text_area("**환자 상태에 관한 상세 소견**",
+        #              explain, height=200)
+
+        # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
+        if st.button("환자 정보 재등록"):
+            reset_info()
+
+        res = supabase.table("diagnosis").select("explain").eq("diag", "안검염(마이봄샘 기능장애 포함)").execute()
+        raw = res.data[0]['explain']
+        raw = raw.replace("{patient}", st.session_state['patient_info']['patient_name'])
+        st.write(raw)
+
+    # 새로운 환자 정보를 등록한다.
+    else:
+        input_patient_info()
+
+# 새로운 환자 정보 입력을 위한 리셋    
+def reset_info():
+        st.session_state['patient_info'] = None
+        st.rerun()
+
+# 환자 정보 등록 과정
+def input_patient_info():
+
+    # DB에 저장된 주치의 명을 가져온다.    
+    doctors = run_related_query()
+    df_docs = pd.DataFrame(doctors.data)
+    docs_lst = df_docs['name'].tolist()
+    docs_lst.insert(0, '<선택>')
+
     # 소견 분류 상세 내용
     categories = {1: '전안부', 2:'각막', 3:'전방', 4:'수정체', 5:'망막', 6:'시신경'}
     category_details = {
         '전안부': ["안검염(마이봄샘 기능장애 포함)", "건성안"], 
-        '각막': ["내피세포 이상 1200개 미만", "1200~1500개", "각막혼탁","기타각막질환"], 
-        '전방': ["얕은 전방", "산동 저하", "소대 이상", "급성폐쇄각녹내장", "거짓비닐증후군", "외상"],
+        '각막': ["내피세포 이상 1200개 미만", "내피세포 이상 1200~1500개", "각막혼탁","기타각막질환"], 
+        '전방': ["얕은 전방", "산동 저하", "소대 이상", "급성폐쇄각녹내장", "거짓비늘증후군", "외상"],
         '수정체': ["심한 백내장(백색, 갈색, 후낭하혼탁 포함)", "안저검사 불가"],
         '망막': ["망막질환 (황반변성, 당뇨망막병증 등)"],
         '시신경': ["녹내장", "뇌병변으로 인한 시야장애"]}
@@ -78,14 +149,14 @@ def page_input():
                 st.write("#### 각막")
             selelcted_cats = []
             with cat2_cotent:
-                cat2_1, cat2_2 = st.columns([2, 1])
+                cat2_1, cat2_2 = st.columns([1, 1])
                 with cat2_1:
                     if st.checkbox("내피세포 이상 1200개 미만", key=2_1):
                         selelcted_cats.append("내피세포 이상 1200개 미만")
                 with cat2_2:
-                    if st.checkbox("1200~1500개", key=2_2):
-                        selelcted_cats.append("1200~1500개")
-                cat2_1_u, cat2_2_u = st.columns([2, 1])
+                    if st.checkbox("내피세포 이상 1200~1500개", key=2_2):
+                        selelcted_cats.append("내피세포 이상 1200~1500개")
+                cat2_1_u, cat2_2_u = st.columns([1, 1])
                 with cat2_1_u:
                     if st.checkbox("각막혼탁", key=2_3):
                         selelcted_cats.append("각막혼탁")
@@ -93,7 +164,7 @@ def page_input():
                     if st.checkbox("기타각막질환", key=2_4):
                         selelcted_cats.append("기타각막질환")
             diagnosis["각막"] = selelcted_cats
-        # 분류 3 : '전방': ["얕은 전방", "산동 저하", "소대 이상", "급성폐쇄각녹내장", "거짓비닐증후군", "외상"]
+        # 분류 3 : '전방': ["얕은 전방", "산동 저하", "소대 이상", "급성폐쇄각녹내장", "거짓비늘증후군", "외상"]
         with st.container(border=True):
             cat3_title, cat3_cotent = st.columns([1, 5])
             with cat3_title:
@@ -115,8 +186,8 @@ def page_input():
                     if st.checkbox("급성폐쇄각녹내장", key=3_4):
                         selelcted_cats.append("급성폐쇄각녹내장")
                 with cat3_2_u:
-                    if st.checkbox("거짓비닐증후군", key=3_5):
-                        selelcted_cats.append("거짓비닐증후군")
+                    if st.checkbox("거짓비늘증후군", key=3_5):
+                        selelcted_cats.append("거짓비늘증후군")
                 with cat3_3_u:
                     if st.checkbox("외상", key=3_6):
                         selelcted_cats.append("외상")
@@ -162,89 +233,6 @@ def page_input():
                         selelcted_cats.append("뇌병변으로 인한 시야장애")
             diagnosis["시신경"] = selelcted_cats
 
-    if 'patient_info' not in st.session_state:
-        st.session_state['patient_info'] = None
-
-    # 환자 등록이 완료된 경우, 등록된 정보를 보여준다.
-    if st.session_state['patient_info']:
-        colp_1, colp_2 = st.columns(2)
-        patient_data = {
-            "항목": ["환자 번호", "이름", "성별", "생년월일", "주치의", "수술 부위", "수술 날짜", "수술 시간", "1차 소견", "2차소견"],
-            "정보": [
-                st.session_state['patient_info']['patient_number'],
-                st.session_state['patient_info']['patient_name'],
-                st.session_state['patient_info']['gender'],
-                st.session_state['patient_info']['birth_date'],
-                st.session_state['patient_info']['primary_doctor'],
-                st.session_state['patient_info']['surgery_eye'],
-                st.session_state['patient_info']['surgery_date'],
-                st.session_state['patient_info']['surgery_time'],
-                st.session_state['patient_info']['category'],
-                st.session_state['patient_info']['diagnosis']
-            ]
-        }
-        df_patient_info = pd.DataFrame(patient_data)
-        with colp_2:
-            st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
-        
-        # 야래쪽에는 등록된 정보에 기반하여, 상세 소견을 DB에서 검색하여 보여준다.
-        res = supabase.table("diagnosis_2nd").select("explain").eq("name", st.session_state['patient_info']['diagnosis']).execute()
-        explain = res.data[0]['explain']
-        
-        if explain == 'undefined':
-            if 'explain' not in st.session_state['patient_info']:
-                info = pick_patient_info(st.session_state['patient_info'])
-                msg = {"role": "user", "content": info}
-                explain = diagnosis_draft(msg)
-                st.session_state['patient_info']['explain'] = explain
-            else:
-                explain = st.session_state['patient_info']['explain']
-
-        with colp_1:
-            st.markdown("**환자 상태에 관한 상세 소견**")
-            st.markdown(explain)
-        # st.text_area("**환자 상태에 관한 상세 소견**",
-        #              explain, height=200)
-
-        # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
-        if st.button("환자 정보 재등록"):
-            reset_info()
-
-    # 새로운 환자 정보를 등록한다.
-    else:
-        input_patient_info()
-
-# 새로운 환자 정보 입력을 위한 리셋    
-def reset_info():
-        st.session_state['patient_info'] = None
-        st.rerun()
-
-# 환자 정보 등록 과정
-def input_patient_info():
-    
-    doctors, categories = run_related_query()
-    df_docs = pd.DataFrame(doctors.data)
-    docs_lst = df_docs['name'].tolist()
-    docs_lst.insert(0, '<선택>')
-
-    df_cats = pd.DataFrame(categories.data)
-    cats_lst = df_cats['name'].tolist()
-    cats_lst.insert(0, '<카테고리 선택>')
-
-    def update_details():
-        if 'category' in st.session_state:
-            category = st.session_state['category']
-            cat_idx = cats_lst.index(category)-1
-            if cat_idx == -1:
-                st.session_state['diagnosis'] = []
-            else:
-                response = supabase.table("diagnosis_2nd").select("id", "name").eq("category", (cat_idx)).execute()
-                st.session_state['diagnosis'] = [item['name'] for item in response.data]
-        else:
-            st.session_state['category'] = "<카테고리 선택>"
-
-    _ = st.selectbox("1차 소견", cats_lst, key='category', on_change=update_details)
-
     with st.form("환자 정보 입력"):
         # 1. 환자번호 입력 (7자리 숫자)
         col1_1, col1_2 = st.columns(2)
@@ -268,24 +256,25 @@ def input_patient_info():
                                         max_value=datetime.today())
 
         # 5. 주치의 선택
-        primary_doctor = st.selectbox("주치의", docs_lst)
-
-        # 6. 수술 눈 부위 선택 (좌안, 우안, 양안)
-        surgery_eye = st.radio("수술 부위", ["좌안", "우안", "양안"])
-
-        # 7. 예정 수술 일자와 시간 선택
         col3_1, col3_2 = st.columns(2)
         with col3_1:
-            surgery_date = st.date_input("수술 날짜")
-        with col3_2:
-            surgery_time = st.time_input("수술 시간", datetime.now().time())
+            primary_doctor = st.selectbox("주치의", docs_lst)
 
-        if 'diagnosis' in st.session_state and st.session_state['diagnosis']:
-            diagnosis = st.selectbox("2차 소견", st.session_state['diagnosis'])
+        # 6. 수술 눈 부위 선택 (좌안, 우안, 양안)
+        with col3_2:
+            surgery_eye = st.radio("수술 부위", ["좌안", "우안", "양안"], horizontal=True)
+
+        # 7. 예정 수술 일자와 시간 선택
+        col4_1, col4_2 = st.columns(2)
+        with col4_1:
+            surgery_date = st.date_input("수술 날짜")
+        with col4_2:
+            surgery_time = st.time_input("수술 시간", datetime.now().time())
 
         # 폼 제출 버튼
         submitted = st.form_submit_button("환자 정보 등록")
-                # 유효성 검사
+        
+        # 유효성 검사
         if submitted:
             error_messages = []
 
@@ -324,8 +313,10 @@ def input_patient_info():
                     'surgery_eye': surgery_eye,
                     'surgery_date': surgery_date,
                     'surgery_time': surgery_time,
-                    'category': st.session_state['category'],
                     'diagnosis' : diagnosis
                 }
                 st.success("환자 정보가 성공적으로 등록되었습니다.")
                 st.rerun()
+
+def reset_category_select():
+    pass

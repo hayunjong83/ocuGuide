@@ -1,5 +1,6 @@
 import streamlit as st
 from helper import autoplay_audio
+from page2 import supabase
 
 def page_info():
     st.markdown(
@@ -8,8 +9,14 @@ def page_info():
     """
     )
 
-    tabs = st.tabs([":blue[**개요**]",
-                    "정보1", "정보2", "정보3", "정보4", "정보5"])
+    tab_lst = ["**개요**", "정보1", "정보2", "정보3", "정보4", "정보5"]
+    personalized = False
+    if 'patient_info' in st.session_state:
+        if st.session_state['patient_info'] != None:
+            tab_lst = [":blue[**개요**]", ":red[환자별 맞춤 진단]", "정보1", "정보2", "정보3", "정보4", "정보5"]
+            personalized = True
+    
+    tabs = st.tabs(tab_lst)
 
     with tabs[0]:
         # st.subheader("정보 개요")
@@ -34,7 +41,7 @@ def page_info():
 
     """)
 
-    with tabs[1]:
+    with tabs[-5]:
         # st.subheader("백내장이란?")
         st.markdown(
     """
@@ -62,7 +69,7 @@ def page_info():
         if st.button(f"▶️ 음성으로 듣기", key='info_1_2'):
             autoplay_audio('./ref/contents/info_1_2.mp3')
 
-    with tabs[2]:
+    with tabs[-4]:
         # st.subheader("백내장 수술 과정")
         st.markdown(
     """
@@ -99,7 +106,7 @@ def page_info():
         if st.button(f"▶️ 음성으로 듣기", key='info_2_3'):
             autoplay_audio('./ref/contents/info_2_3.mp3')
         
-    with tabs[3]:
+    with tabs[-3]:
         # st.subheader("수술 전 준비")
         st.markdown(
     """
@@ -131,7 +138,7 @@ def page_info():
             autoplay_audio('./ref/contents/info_3_3.mp3')
 
 
-    with tabs[4]:
+    with tabs[-2]:
         # st.subheader("수술 후 회복")
         st.markdown(
     """
@@ -167,7 +174,7 @@ def page_info():
         if st.button(f"▶️ 음성으로 듣기", key='info_4_3'):
             autoplay_audio('./ref/contents/info_4_3.mp3')
         
-    with tabs[5]:
+    with tabs[-1]:
         # st.subheader("자주 묻는 질문들")
         faqs = [
             {
@@ -191,3 +198,32 @@ def page_info():
                 st.write(faq["a"])
                 if st.button(f"▶️ 음성으로 듣기", key=faq["q"]):
                     autoplay_audio(faq['p'])
+    
+    if personalized:
+        with tabs[1]:
+            diag = st.session_state['patient_info']['diagnosis']
+            patient_name = st.session_state['patient_info']['patient_name']
+            # st.write(st.session_state['patient_info']['diagnosis'])
+            st.subheader("종합 소견")
+            if len(diag['전안부']) != 0:
+                st.write(f"{patient_name}님은 백내장 수술의 위험성이 낮고, 합병증 발생 가능성이 높지 않은 상태입니다. 하지만 수술 후 건성안 증상이 악화될 수 있어 이에 대한 지속적인 관리가 필요합니다. 수술 시에는 불가항력적인 상황이 발생할 수 있으므로, 저희 세브란스 안과 병원 의료진은 {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다."
+                )
+            elif len(diag["각막"]) or len(diag["전방"]) or len(diag["수정체"]) or len(diag["망막"]) or len(diag["시신경"]):
+                st.write(f"{patient_name}님은 일반적인 경우와 비교하여 위험요인들을 추가로 가지고 있는 상태입니다. 저희 세브란스 안과 병원 의료진은 이러한 위험요인들을 충분히 숙지하고 준비하여, {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다."
+                )
+            else:
+                st.write(f"{patient_name}님은 백내장 수술의 위험성이 낮고, 합병증 발생 가능성이 높지 않은 상태입니다. 하지만 수술 시에는 불가항력적인 상황이 발생할 수 있으므로, 저희 세브란스 안과 병원 의료진은 {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다.")
+
+            st.write("---")
+            st.write("#### 세부 내용")
+
+            for cat, details in diag.items():
+                if len(details) == 0:
+                    continue
+                with st.container(border=True):
+                    st.write(f"**{cat} 이상**")
+                    for detail in details:    
+                        res = supabase.table("diagnosis").select("explain").eq("diag", detail).execute()
+                        raw = res.data[0]['explain'].replace("{patient}", patient_name)
+                        st.write(raw)
+                        st.write("---")
