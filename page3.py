@@ -13,7 +13,7 @@ def page_info():
     personalized = False
     if 'patient_info' in st.session_state:
         if st.session_state['patient_info'] != None:
-            tab_lst = [":blue[**개요**]", ":red[환자별 맞춤 진단]", "정보1", "정보2", "정보3", "정보4", "정보5"]
+            tab_lst.append(":red[환자별 맞춤 진단]")
             personalized = True
     
     tabs = st.tabs(tab_lst)
@@ -41,7 +41,7 @@ def page_info():
 
     """)
 
-    with tabs[-5]:
+    with tabs[1]:
         # st.subheader("백내장이란?")
         st.markdown(
     """
@@ -69,7 +69,7 @@ def page_info():
         if st.button(f"▶️ 음성으로 듣기", key='info_1_2'):
             autoplay_audio('./ref/contents/info_1_2.mp3')
 
-    with tabs[-4]:
+    with tabs[2]:
         # st.subheader("백내장 수술 과정")
         st.markdown(
     """
@@ -106,7 +106,7 @@ def page_info():
         if st.button(f"▶️ 음성으로 듣기", key='info_2_3'):
             autoplay_audio('./ref/contents/info_2_3.mp3')
         
-    with tabs[-3]:
+    with tabs[3]:
         # st.subheader("수술 전 준비")
         st.markdown(
     """
@@ -138,7 +138,7 @@ def page_info():
             autoplay_audio('./ref/contents/info_3_3.mp3')
 
 
-    with tabs[-2]:
+    with tabs[4]:
         # st.subheader("수술 후 회복")
         st.markdown(
     """
@@ -174,7 +174,7 @@ def page_info():
         if st.button(f"▶️ 음성으로 듣기", key='info_4_3'):
             autoplay_audio('./ref/contents/info_4_3.mp3')
         
-    with tabs[-1]:
+    with tabs[5]:
         # st.subheader("자주 묻는 질문들")
         faqs = [
             {
@@ -200,7 +200,7 @@ def page_info():
                     autoplay_audio(faq['p'])
     
     if personalized:
-        with tabs[1]:
+        with tabs[-1]:
             diag = st.session_state['patient_info']['diagnosis']
             patient_name = st.session_state['patient_info']['patient_name']
             # st.write(st.session_state['patient_info']['diagnosis'])
