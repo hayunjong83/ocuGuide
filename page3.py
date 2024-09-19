@@ -223,6 +223,12 @@ def page_info():
             else:
                 st.write(f"{patient_name}님은 백내장 수술의 위험성이 낮고, 합병증 발생 가능성이 높지 않은 상태입니다. 하지만 수술 시에는 불가항력적인 상황이 발생할 수 있으므로, 저희 세브란스 안과 병원 의료진은 {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다.")
 
+            with st.container(border=True):
+                explain = st.session_state["patient_info"]["explain"]
+                explain = explain.replace("#","")
+                st.write("**(LLM 생성)환자 상태에 관한 종합 소견**")
+                st.write(explain)
+
             st.write("---")
             st.write("#### 세부 내용")
 
