@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 from supabase import create_client, Client
-from helper import diagnosis_draft
+from helper import diagnosis_draft, diagnosis_draft2
 
 # Supabase 연결 설정
 @st.cache_resource
@@ -18,7 +18,6 @@ supabase = init_connection()
 @st.cache_resource(ttl=600)
 def run_related_query():
     doctor = supabase.table("doctor").select("*").execute()
-    # category = supabase.table("diagnosis_1st").select("*").execute()
     return doctor
 
 def pick_patient_info(patient_info):
@@ -34,6 +33,17 @@ def pick_patient_info(patient_info):
     이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {cats} / {detail}"""
     return msg
 
+def pick_patient_info2(patient_info):
+    name = patient_info["patient_name"]
+    gender = patient_info["gender"]
+    birthday = patient_info["birth_date"]
+    age = datetime.now().year - birthday.year - ((datetime.now().month, datetime.now().day) < (birthday.month, birthday.day))
+    eye = patient_info["surgery_eye"]
+    diagnosis = patient_info["diagnosis"]
+
+    msg = f"""환자의 정보는 다음과 같습니다.
+    이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {diagnosis}"""
+    return msg
 
 # 환자 정보 등록
 def page_input():    
@@ -46,25 +56,57 @@ def page_input():
 
     # 환자 등록이 완료된 경우, 등록된 정보를 보여준다.
     if st.session_state['patient_info']:
-        colp_1, colp_2 = st.columns(2)
+        # patient_data = {
+        #     "항목": ["환자 번호", "이름", "성별", "생년월일", "주치의", "수술 부위", "수술 날짜", "수술 시간"],
+        #     "정보": [
+        #         st.session_state['patient_info']['patient_number'],
+        #         st.session_state['patient_info']['patient_name'],
+        #         st.session_state['patient_info']['gender'],
+        #         st.session_state['patient_info']['birth_date'],
+        #         st.session_state['patient_info']['primary_doctor'],
+        #         st.session_state['patient_info']['surgery_eye'],
+        #         st.session_state['patient_info']['surgery_date'],
+        #         st.session_state['patient_info']['surgery_time'],
+        #         # st.session_state['patient_info']['diagnosis']
+        #     ]
+        # }
+        # df_patient_info = pd.DataFrame(patient_data)
+        # st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+
+        info = st.session_state['patient_info']
         patient_data = {
-            "항목": ["환자 번호", "이름", "성별", "생년월일", "주치의", "수술 부위", "수술 날짜", "수술 시간"],
-            "정보": [
-                st.session_state['patient_info']['patient_number'],
-                st.session_state['patient_info']['patient_name'],
-                st.session_state['patient_info']['gender'],
-                st.session_state['patient_info']['birth_date'],
-                st.session_state['patient_info']['primary_doctor'],
-                st.session_state['patient_info']['surgery_eye'],
-                st.session_state['patient_info']['surgery_date'],
-                st.session_state['patient_info']['surgery_time'],
-                # st.session_state['patient_info']['diagnosis']
-            ]
+            "환자번호 / 이름": [f"{info['patient_number']} / {info['patient_name']}"],
+            "성별 / 생년월일": [f"{info['gender']} / {info['birth_date']}"],
+            "주치의 / 수술부위": [f"{info['primary_doctor']} / {info['surgery_eye']}"],
+            "수술날짜 / 수술 시간": [f"{info['surgery_date']} / {info['surgery_time']}"]
         }
         df_patient_info = pd.DataFrame(patient_data)
-        with colp_2:
-            st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+        st.markdown("### 등록된 환자정보")
+        st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+
+        with st.container(border=True):
+            st.write("#### 등록된 1차 소견")
+            for k, v in info["diagnosis"].items():
+                if len(v) != 0:
+                    st.markdown(f"- {k}: {v}")
+
+        with st.container(border=True):
+            st.write("#### 검사 결과를 바탕으로 한 종합 소견")
+            if 'explain' not in st.session_state["patient_info"]:
+                st.session_state['patient_info']["explain"] = None
+                picked_info = pick_patient_info2(info)
+                msg = {"role": "user", "content": picked_info}
+                explain = diagnosis_draft2(msg)
+                st.session_state["patient_info"]["explain"] = explain
+            else:
+                explain = st.session_state["patient_info"]["explain"]
+            
+            explain = explain.replace("#","")
+            st.write("**환자 상태에 관한 종합 소견**")
+            st.write(explain)
+
         
+            
         # 야래쪽에는 등록된 정보에 기반하여, 상세 소견을 DB에서 검색하여 보여준다.
         # res = supabase.table("diagnosis_2nd").select("explain").eq("name", st.session_state['patient_info']['diagnosis']).execute()
         # explain = res.data[0]['explain']
