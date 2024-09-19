@@ -96,7 +96,8 @@ def page_input():
                 st.session_state['patient_info']["explain"] = None
                 picked_info = pick_patient_info2(info)
                 msg = {"role": "user", "content": picked_info}
-                explain = diagnosis_draft2(msg)
+                with st.spinner('검사 결과를 바탕으로 진단을 내리는 중입니다...'):
+                    explain = diagnosis_draft2(msg)
                 st.session_state["patient_info"]["explain"] = explain
             else:
                 explain = st.session_state["patient_info"]["explain"]
@@ -137,6 +138,8 @@ def page_input():
 # 새로운 환자 정보 입력을 위한 리셋    
 def reset_info():
         st.session_state['patient_info'] = None
+        # Chatbot history reset
+        st.session_state['messages'] = None
         st.rerun()
 
 # 환자 정보 등록 과정
