@@ -38,8 +38,14 @@ def page_info():
 
     - 추가적인 질문이 있으신 경우에는 :red[ :question: Q&A 챗봇]을 통하여 간단하게 알아보세요.
     - 언제든 주치의 선생님을 통하여, 더 상세하고 친절한 설명을 받으실 수 있습니다.
-
     """)
+        st.markdown("### 백내장 수술 영상")
+        st.markdown(
+    """
+    <iframe src="https://drive.google.com/file/d/1DTmGn-RaQs9R7T3k1VfbPf1TiOQ0xki0/preview" width="640" height="363"></iframe>
+    """,
+    unsafe_allow_html=True
+)
 
     with tabs[1]:
         # st.subheader("백내장이란?")
