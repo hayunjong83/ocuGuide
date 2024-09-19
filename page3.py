@@ -40,9 +40,28 @@ def page_info():
     - 언제든 주치의 선생님을 통하여, 더 상세하고 친절한 설명을 받으실 수 있습니다.
     """)
         st.markdown("### 백내장 수술 영상")
+#         st.markdown(
+#     """
+#     <iframe src="https://drive.google.com/file/d/1DTmGn-RaQs9R7T3k1VfbPf1TiOQ0xki0/preview" width="640" height="363"></iframe>
+#     """,
+#     unsafe_allow_html=True
+# )
+    #     st.markdown(
+    # """
+    # <div style="display: flex; justify-content: center;">
+    #     <iframe src="https://drive.google.com/file/d/1DTmGn-RaQs9R7T3k1VfbPf1TiOQ0xki0/preview" 
+    #             style="width: 80%; height: auto;" 
+    #             frameborder="0" allowfullscreen></iframe>
+    # </div>
+    # """,
+    # unsafe_allow_html=True)
         st.markdown(
     """
-    <iframe src="https://drive.google.com/file/d/1DTmGn-RaQs9R7T3k1VfbPf1TiOQ0xki0/preview" width="640" height="363"></iframe>
+    <div style="display: flex; justify-content: center;">
+        <iframe src="https://drive.google.com/file/d/1DTmGn-RaQs9R7T3k1VfbPf1TiOQ0xki0/preview" 
+                style="width: 80%; height: auto; aspect-ratio: 16/9;" 
+                frameborder="0" allowfullscreen></iframe>
+    </div>
     """,
     unsafe_allow_html=True
 )
