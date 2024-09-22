@@ -4,7 +4,8 @@ from openai import OpenAI
 from langsmith.wrappers import wrap_openai
 from langsmith import traceable
 import os
-from langchain_chroma import Chroma
+# from langchain_chroma import Chroma
+from langchain.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
 os.environ["LANGCHAIN_TRACING_V2"] = st.secrets["LANGCHAIN_TRACING_V2"]

@@ -6,4 +6,4 @@ langchain
 langsmith
 langchain_community
 langchain_openai
-langchain-chroma==0.1.2
+# langchain-chroma==0.1.2
