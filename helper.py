@@ -1,8 +1,16 @@
 import streamlit as st
 import base64
 from openai import OpenAI
+from langsmith.wrappers import wrap_openai
+from langsmith import traceable
+import os
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+os.environ["LANGCHAIN_TRACING_V2"] = st.secrets["LANGCHAIN_TRACING_V2"]
+os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGCHAIN_ENDPOINT"]
+os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN_PROJECT"]
+os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
+
+client = wrap_openai(OpenAI(api_key=st.secrets["OPENAI_API_KEY"]))
 
 # 음성 파일의 자동 재생
 def autoplay_audio(file_path: str):
@@ -44,6 +52,7 @@ def diagnosis_draft(msg):
     )
     return response.choices[0].message.content
 
+@traceable
 def diagnosis_draft2(msg):
     messages = [
         {"role": "system", 
