@@ -7,3 +7,4 @@ langsmith
 langchain_community
 langchain_openai
 langchain-chroma
+protobuf==3.20.*
