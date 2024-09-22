@@ -4,13 +4,31 @@ from openai import OpenAI
 from langsmith.wrappers import wrap_openai
 from langsmith import traceable
 import os
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
 os.environ["LANGCHAIN_TRACING_V2"] = st.secrets["LANGCHAIN_TRACING_V2"]
 os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGCHAIN_ENDPOINT"]
 os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN_PROJECT"]
 os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
 
+# OpenAI 클라이언트
 client = wrap_openai(OpenAI(api_key=st.secrets["OPENAI_API_KEY"]))
+langchain_client = ChatOpenAI(model = "gpt-4o-mini", api_key=st.secrets["OPENAI_API_KEY"])
+
+# 임베딩 모델 선언
+openai_embedding_model = "text-embedding-3-small"
+openai_embedding = OpenAIEmbeddings(model=openai_embedding_model, api_key=st.secrets["OPENAI_API_KEY"])
+
+collection_name = "ocuguide_chromadb"
+ocuguide_path = "./db/ocuguide_chromadb/"
+
+persist_db = Chroma(
+    persist_directory = ocuguide_path,
+    embedding_function=OpenAIEmbeddings(),
+    collection_name=collection_name
+)
+retriever = persist_db.as_retriever()
 
 # 음성 파일의 자동 재생
 def autoplay_audio(file_path: str):

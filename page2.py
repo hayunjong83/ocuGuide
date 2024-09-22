@@ -119,6 +119,7 @@ def reset_info():
         st.session_state['patient_info'] = None
         # Chatbot history reset
         st.session_state['messages'] = None
+        st.session_state['rag_messages'] = None
         st.rerun()
 
 # 환자 정보 등록 과정
