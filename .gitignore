@@ -7,3 +7,4 @@ sign_up.py
 
 # knowledge base
 knowledge/
+generate_vectorstore.py
