@@ -7,4 +7,3 @@ langsmith
 langchain_community
 langchain_openai
 langchain-chroma
-sqlite3 >= 3.35.0 
