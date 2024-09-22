@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 from supabase import create_client, Client
-from helper import diagnosis_draft, diagnosis_draft2
+from helper import diagnosis_draft
 
 # Supabase 연결 설정
 @st.cache_resource
@@ -97,7 +97,7 @@ def page_input():
                 picked_info = pick_patient_info2(info)
                 msg = {"role": "user", "content": picked_info}
                 with st.spinner('검사 결과를 바탕으로 진단을 내리는 중입니다...'):
-                    explain = diagnosis_draft2(msg)
+                    explain = diagnosis_draft(msg)
                 st.session_state["patient_info"]["explain"] = explain
             else:
                 explain = st.session_state["patient_info"]["explain"]
@@ -105,27 +105,6 @@ def page_input():
             explain = explain.replace("#","")
             st.write("**환자 상태에 관한 종합 소견**")
             st.write(explain)
-
-        
-            
-        # 야래쪽에는 등록된 정보에 기반하여, 상세 소견을 DB에서 검색하여 보여준다.
-        # res = supabase.table("diagnosis_2nd").select("explain").eq("name", st.session_state['patient_info']['diagnosis']).execute()
-        # explain = res.data[0]['explain']
-        
-        # if explain == 'undefined':
-        #     if 'explain' not in st.session_state['patient_info']:
-        #         info = pick_patient_info(st.session_state['patient_info'])
-        #         msg = {"role": "user", "content": info}
-        #         explain = diagnosis_draft(msg)
-        #         st.session_state['patient_info']['explain'] = explain
-        #     else:
-        #         explain = st.session_state['patient_info']['explain']
-
-        # with colp_1:
-        #     st.markdown("**환자 상태에 관한 상세 소견**")
-        #     st.markdown(explain)
-        # st.text_area("**환자 상태에 관한 상세 소견**",
-        #              explain, height=200)
 
         # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
         if st.button("환자 정보 재등록"):
