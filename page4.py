@@ -1,9 +1,16 @@
 import streamlit as st
 from openai import OpenAI
 from helper import client
+from langsmith import traceable
 
-def page_chatbot():
-    st.title("Q&A 챗봇")
+@traceable
+def page_w_chatgpt():
+    st.title("❔ Q&A 챗봇 [챗GPT]")
+
+    with st.container(border=True):
+        st.write("- :blue[**OcuGUIDE**]에서 궁금했던 내용을 무엇이든 물어보세요.")
+        st.write("- 이해가 어려웠거나, 다시 듣고 싶으신 내용을 챗GPT 에이전트가 성심껏 답변드립니다.")
+        st.write("- 질문이 끝나신 후, 이제 곧 만나실 주치의에게 추가 질문과 설명을 들을 수 있습니다.")
 
     if "openai_model" not in st.session_state:
         st.session_state["openai_model"] = "gpt-4o-mini"
@@ -23,7 +30,7 @@ def page_chatbot():
         """}]
         initial_messages.append({
             "role": "assistant",
-            "content": "설명을 다시 듣고 싶은 내용이 있으시거나, 질문이 있으시면 말씀해주세요."
+            "content": "안녕하세요. 백내장의 모든것 OcuGUIDE 입니다."
         })
         st.session_state.messages = initial_messages
     
