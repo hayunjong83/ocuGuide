@@ -8,4 +8,5 @@ langchain_community
 langchain_openai
 protobuf==3.20.*
 langchain-chroma
-chromadb
+streamlit==1.28.1
+chromadb==0.4.17
