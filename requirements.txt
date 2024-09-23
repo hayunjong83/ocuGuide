@@ -9,4 +9,5 @@ langchain_openai
 # langchain-chroma==0.1.2
 # chromadb
 # google-colab
-# pysqlite-binary 
+# pysqlite-binary
+pinecone-client
