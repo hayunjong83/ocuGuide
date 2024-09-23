@@ -5,7 +5,7 @@ from langsmith.wrappers import wrap_openai
 from langsmith import traceable
 import os
 # from langchain_chroma import Chroma
-from langchain.vectorstores import Chroma
+# from langchain.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
 os.environ["LANGCHAIN_TRACING_V2"] = st.secrets["LANGCHAIN_TRACING_V2"]
@@ -24,12 +24,12 @@ openai_embedding = OpenAIEmbeddings(model=openai_embedding_model, api_key=st.sec
 collection_name = "ocuguide_chromadb"
 ocuguide_path = "./db/ocuguide_chromadb/"
 
-persist_db = Chroma(
-    persist_directory = ocuguide_path,
-    embedding_function=OpenAIEmbeddings(),
-    collection_name=collection_name
-)
-retriever = persist_db.as_retriever()
+# persist_db = Chroma(
+#     persist_directory = ocuguide_path,
+#     embedding_function=OpenAIEmbeddings(),
+#     collection_name=collection_name
+# )
+# retriever = persist_db.as_retriever()
 
 # 음성 파일의 자동 재생
 def autoplay_audio(file_path: str):
