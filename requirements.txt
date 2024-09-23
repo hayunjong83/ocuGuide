@@ -7,6 +7,6 @@ langsmith
 langchain_community
 langchain_openai
 # langchain-chroma==0.1.2
-chromadb
-google-colab
-pysqlite-binary 
+# chromadb
+# google-colab
+# pysqlite-binary 
