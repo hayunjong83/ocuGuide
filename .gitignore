@@ -1,6 +1,7 @@
 # Secrets
 .streamlit/
 __pycache__/
+.devcontainer/
 
 # temporaray login related
 sign_up.py
