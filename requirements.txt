@@ -2,14 +2,14 @@ pandas
 supabase
 streamlit-authenticator
 openai
-langchain
+langchain==0.2.14
 langsmith
-langchain_community
-langchain_openai
+# langchain_community
+langchain_openai==0.2.0
 # langchain-chroma==0.1.2
 # chromadb
 # google-colab
 # pysqlite-binary
 pinecone[grpc]
 pinecone-client
-langchain-pinecone
+langchain-pinecone==0.2.0
