@@ -11,4 +11,5 @@ langchain_openai
 # google-colab
 # pysqlite-binary
 pinecone[grpc]
+pinecone-client
 langchain-pinecone
