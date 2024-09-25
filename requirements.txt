@@ -4,12 +4,12 @@ streamlit-authenticator
 openai
 langchain==0.2.14
 langsmith
-# langchain_community
+langchain_community==0.2.12
 langchain_openai==0.2.0
 # langchain-chroma==0.1.2
 # chromadb
 # google-colab
 # pysqlite-binary
 pinecone[grpc]
-pinecone-client
+pinecone-client==5.0.1
 langchain-pinecone==0.2.0
