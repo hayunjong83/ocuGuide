@@ -214,14 +214,8 @@ def page_info():
             patient_name = st.session_state['patient_info']['patient_name']
             # st.write(st.session_state['patient_info']['diagnosis'])
             st.subheader("종합 소견")
-            if len(diag['전안부']) != 0:
-                st.write(f"{patient_name}님은 백내장 수술의 위험성이 낮고, 합병증 발생 가능성이 높지 않은 상태입니다. 하지만 수술 후 건성안 증상이 악화될 수 있어 이에 대한 지속적인 관리가 필요합니다. 수술 시에는 불가항력적인 상황이 발생할 수 있으므로, 저희 세브란스 안과 병원 의료진은 {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다."
-                )
-            elif len(diag["각막"]) or len(diag["전방"]) or len(diag["수정체"]) or len(diag["망막"]) or len(diag["시신경"]):
-                st.write(f"{patient_name}님은 일반적인 경우와 비교하여 위험요인들을 추가로 가지고 있는 상태입니다. 저희 세브란스 안과 병원 의료진은 이러한 위험요인들을 충분히 숙지하고 준비하여, {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다."
-                )
-            else:
-                st.write(f"{patient_name}님은 백내장 수술의 위험성이 낮고, 합병증 발생 가능성이 높지 않은 상태입니다. 하지만 수술 시에는 불가항력적인 상황이 발생할 수 있으므로, 저희 세브란스 안과 병원 의료진은 {patient_name}님이 최고의 결과를 얻을 수 있도록 최선의 노력을 다하겠습니다.")
+            contents = personalized_diagnosis(diag, patient_name)
+            st.write(contents)
 
             with st.container(border=True):
                 explain = st.session_state["patient_info"]["explain"]
@@ -242,3 +236,86 @@ def page_info():
                         raw = res.data[0]['explain'].replace("{patient}", patient_name)
                         st.write(raw)
                         st.write("---")
+
+def personalized_diagnosis(diag, patient_name):
+    pass
+    # a) 아무것도 체크되지 않은 경우
+    # b) 전안부만 체크된 경우
+    # c) 망막 또는 시신경 체크가 된경우
+    # d) 각막 체크가 된 경우
+    # e) 전방 또는 수정체 체크가 된 경우
+    # 중요도 : e > d > c > b > a
+    cat = ""
+    severe = False
+    sentence = ""
+    detail = []
+
+    # 최상위(e와 d) : 일반적인 경우와 비교하여 위험요인을 추가로 가지고 있는 상태 + [마지막 문장]
+    if len(diag["전방"]) != 0 or len(diag["수정체"]) != 0 or len(diag["각막"]):
+        severe = True
+        # e만
+        if len(diag["각막"]) == 0:
+
+            if len(diag["전방"]) == 0 :
+                cat = "수정체"
+            elif len(diag["수정체"]) == 0:
+                cat = "전방"
+            else:
+                cat = "전방 및 수정체"
+            
+            detail.append("e")
+            if "심한 백내장(백색, 갈색, 후낭하혼탁 포함)" in diag["수정체"]:
+                detail.append("e_add")
+
+        else:
+            detail.append("e")
+            if "심한 백내장(백색, 갈색, 후낭하혼탁 포함)" in diag["수정체"]:
+                detail.append("e_add")
+            if len(diag["전방"]) != 0 and len(diag["수정체"]) !=0:
+                cat = "전방 및 수정체 그리고 각막"
+            elif len(diag["수정체"]) == 0:
+                cat = "전방 그리고 각막"
+            elif len(diag["전방"]) == 0:
+                cat = "수정체 그리고 각막"
+            else:
+                cat = "각막"
+                detail.remove("e")
+            detail.append("d")
+            if "내피세포 이상 1200개 미만" in diag["각막"] or  "내피세포 이상 1200~1500개" in diag["각막"]:
+                detail.append("d_add")
+            
+    # 위험도에 따른 첫문장 선택 : (e,d / c,b,a)
+    if severe:
+        sentence = f"{patient_name}님은 일반적인 경우와 비교하여 {cat} 관련 위험요인(들)을 추가로 가지고 있는 상태입니다.\n"
+    else:
+        sentence = f"{patient_name}님은 백내장 수술의 위험성이 낮고, 합병증 발생 가능성이 높지 않은 상태입니다.\n"
+
+    minor_cat = ""
+    if len(diag["망막"]) !=0 or len(diag["시신경"]):
+        detail.append("c")
+        if len(diag["시신경"]) == 0:
+            minor_cat = "망막"
+        elif len(diag["망막"]) == 0:
+            minor_cat = "녹내장"
+        else:
+            minor_cat = "망막 또는 녹내장"
+
+    if len(diag["전안부"]) != 0:
+        detail.append("b")
+
+    info = {
+        "e": "백내장 수술의 난이도가 높고, 수술의 범위가 커질 가능성이 있습니다.\n",
+        "e_add": "심한 백내장을 제거하는 과정에서 나타나는 각막부종으로 시력 호전에 제한이 있을 수 있습니다.\n",
+        "d": "백내장 수술 후에도 각막질환으로 인해 시력회복에 제한이 있을 수 있습니다.\n",
+        "d_add": "각막내피세포의 저하로 수술 이후 각막 부종이 나타날 수 있으며, 이로 인한 시력저하가 지속될 시 각막이식술을 고려할 수 있습니다.\n",
+        "c": f"백내장 수술 후에도 {minor_cat} 질환으로 인해 시력 호전에 제한이 있을 수 있습니다.\n",
+        "b": "수술 후 건성안 증상이 악화될 수 있어 이에 대한 지속적인 관리가 필요합니다.\n"
+    }
+    sentence += '\n'
+    sentence += "\n또한 ".join([info[idx] for idx in detail])
+
+    if severe:
+        sentence += '\n'
+        sentence += "저희 세브란스 안과 병원 의료진은 이러한 위험요인(들)을 충분히 숙지하고 준비하겠습니다."
+
+    return sentence
