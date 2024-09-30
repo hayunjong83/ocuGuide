@@ -1,49 +1,45 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
-from supabase import create_client, Client
-from helper import diagnosis_draft
+from helper import supabase, diagnosis_draft
 
-# Supabase 연결 설정
-@st.cache_resource
-def init_connection():
-    url: str = st.secrets["SUPABASE_URL"]
-    key: str = st.secrets["SUPABASE_KEY"]
-    supabase: Client = create_client(url, key)
-    return supabase
-
-# Supabase 연결 설정
-supabase = init_connection()
-
+# 환자 입력에 필요한 정보를 불러온다.
 @st.cache_resource(ttl=600)
 def run_related_query():
     doctor = supabase.table("doctor").select("*").execute()
     return doctor
 
+# 화면에 표시 및 이후 활용을 위하여, 등록된 정보를 메시지로 추출
 def pick_patient_info(patient_info):
     name = patient_info["patient_name"]
     gender = patient_info["gender"]
-    birthday = patient_info["birth_date"]
-    age = datetime.now().year - birthday.year - ((datetime.now().month, datetime.now().day) < (birthday.month, birthday.day))
-    eye = patient_info["surgery_eye"]
-    cats = patient_info["category"]
-    detail = patient_info["diagnosis"]
-
-    msg = f"""환자의 정보는 다음과 같습니다.
-    이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {cats} / {detail}"""
-    return msg
-
-def pick_patient_info2(patient_info):
-    name = patient_info["patient_name"]
-    gender = patient_info["gender"]
-    birthday = patient_info["birth_date"]
-    age = datetime.now().year - birthday.year - ((datetime.now().month, datetime.now().day) < (birthday.month, birthday.day))
+    # birthday = patient_info["birth_date"]
+    age = patient_info["age"]
     eye = patient_info["surgery_eye"]
     diagnosis = patient_info["diagnosis"]
 
     msg = f"""환자의 정보는 다음과 같습니다.
     이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {diagnosis}"""
     return msg
+
+def style_dataframe(df, color):
+    return df.style.set_table_styles(
+        [{
+            'selector': 'th',
+            'props': [
+                ('background-color', color),
+                ('color', 'black'),
+                ('font-family', 'Arial, sans-serif'),
+                ('font-size', '16px')
+            ]
+        }, 
+        {
+            'selector': 'td, th',
+            'props': [
+                ('border', f'2px solid {color}')
+            ]
+        }]
+    ).hide(axis="index")
 
 # 환자 정보 등록
 def page_input():    
@@ -56,33 +52,28 @@ def page_input():
 
     # 환자 등록이 완료된 경우, 등록된 정보를 보여준다.
     if st.session_state['patient_info']:
-        # patient_data = {
-        #     "항목": ["환자 번호", "이름", "성별", "생년월일", "주치의", "수술 부위", "수술 날짜", "수술 시간"],
-        #     "정보": [
-        #         st.session_state['patient_info']['patient_number'],
-        #         st.session_state['patient_info']['patient_name'],
-        #         st.session_state['patient_info']['gender'],
-        #         st.session_state['patient_info']['birth_date'],
-        #         st.session_state['patient_info']['primary_doctor'],
-        #         st.session_state['patient_info']['surgery_eye'],
-        #         st.session_state['patient_info']['surgery_date'],
-        #         st.session_state['patient_info']['surgery_time'],
-        #         # st.session_state['patient_info']['diagnosis']
-        #     ]
-        # }
-        # df_patient_info = pd.DataFrame(patient_data)
-        # st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
-
         info = st.session_state['patient_info']
-        patient_data = {
-            "환자번호 / 이름": [f"{info['patient_number']} / {info['patient_name']}"],
-            "성별 / 생년월일": [f"{info['gender']} / {info['birth_date']}"],
-            "주치의 / 수술부위": [f"{info['primary_doctor']} / {info['surgery_eye']}"],
-            "수술날짜 / 수술 시간": [f"{info['surgery_date']} / {info['surgery_time']}"]
+        patient_personal_data = {
+            "환자번호": [f"{info['patient_number']}"],
+            "이름": [f"{info['patient_name']}"],
+            
+            "성별": [f"{info['gender']}"],
+            "생년월일": [f"{info['birth_date']}"],
+            "나이": [f"{info['age']}"]
         }
-        df_patient_info = pd.DataFrame(patient_data)
+        patient_operation_data = {
+            "주치의": [f"{info['primary_doctor']}"],
+            "수술부위": [f"{info['surgery_eye']}"],
+            
+            "수술날짜": [f"{info['surgery_date']}"],
+            "수술 시간": [f"{info['surgery_time']}"]
+        }
+        df_patient_personal = style_dataframe(pd.DataFrame(patient_personal_data), '#F5F5DC')
+        df_patient_operation = style_dataframe(pd.DataFrame(patient_operation_data), '#FAEBD7')
+        
         st.markdown("### 등록된 환자정보")
-        st.markdown(df_patient_info.style.hide(axis="index").to_html(), unsafe_allow_html=True)
+        st.markdown(df_patient_personal.to_html(), unsafe_allow_html=True)
+        st.markdown(df_patient_operation.to_html(), unsafe_allow_html=True)
 
         with st.container(border=True):
             st.write("#### 등록된 1차 소견")
@@ -94,7 +85,7 @@ def page_input():
             st.write("#### 검사 결과를 바탕으로 한 종합 소견")
             if 'explain' not in st.session_state["patient_info"]:
                 st.session_state['patient_info']["explain"] = None
-                picked_info = pick_patient_info2(info)
+                picked_info = pick_patient_info(info)
                 msg = {"role": "user", "content": picked_info}
                 with st.spinner('검사 결과를 바탕으로 진단을 내리는 중입니다...'):
                     explain = diagnosis_draft(msg)
@@ -274,6 +265,7 @@ def input_patient_info():
                                     value=datetime(2000, 1, 1),
                                         min_value=datetime(1924, 1, 1),
                                         max_value=datetime.today())
+            age = datetime.now().year - birth_date.year - ((datetime.now().month, datetime.now().day) < (birth_date.month, birth_date.day))
 
         # 5. 주치의 선택
         col3_1, col3_2 = st.columns(2)
@@ -329,6 +321,7 @@ def input_patient_info():
                     'patient_name': patient_name,
                     'gender': gender,
                     'birth_date': birth_date,
+                    'age': age,
                     'primary_doctor': primary_doctor,
                     'surgery_eye': surgery_eye,
                     'surgery_date': surgery_date,

@@ -1,17 +1,29 @@
 import streamlit as st
+import os
 import base64
 from openai import OpenAI
 from langsmith.wrappers import wrap_openai
 from langsmith import traceable
-import os
-# from langchain_chroma import Chroma
-# from langchain.vectorstores import Chroma
+from supabase import create_client, Client
+
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 
+
+# OPENAI LOG관련 -LANGSMITH 설정
 os.environ["LANGCHAIN_TRACING_V2"] = st.secrets["LANGCHAIN_TRACING_V2"]
 os.environ["LANGCHAIN_ENDPOINT"] = st.secrets["LANGCHAIN_ENDPOINT"]
 os.environ["LANGCHAIN_PROJECT"] = st.secrets["LANGCHAIN_PROJECT"]
 os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
+
+# 데이터베이스 연결 관련 - Supabase 설정
+@st.cache_resource
+def init_connection():
+    url: str = st.secrets["SUPABASE_URL"]
+    key: str = st.secrets["SUPABASE_KEY"]
+    supabase: Client = create_client(url, key)
+    return supabase
+
+supabase = init_connection()
 
 # OpenAI 클라이언트
 client = wrap_openai(OpenAI(api_key=st.secrets["OPENAI_API_KEY"]))
