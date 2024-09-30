@@ -1,6 +1,6 @@
 pandas
 supabase
-streamlit-authenticator
+streamlit-authenticator==0.3.3
 openai
 langchain
 langsmith
