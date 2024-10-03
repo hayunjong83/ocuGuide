@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
-from helper import supabase, diagnosis_draft
+from helper import supabase, diagnosis_draft, diagnosis_draft_2
 
 # 환자 입력에 필요한 정보를 불러온다.
 @st.cache_resource(ttl=600)
@@ -17,9 +17,10 @@ def pick_patient_info(patient_info):
     age = patient_info["age"]
     eye = patient_info["surgery_eye"]
     diagnosis = patient_info["diagnosis"]
-
+    operation_day = patient_info["surgery_date"]
+    today = datetime.today().strftime("%Y-%m-%d")
     msg = f"""환자의 정보는 다음과 같습니다.
-    이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {diagnosis}"""
+    이름 : {name}, 성별 : {gender}, 나이 : {age}, 수술부위 : {eye}, 검사 결과 : {diagnosis}, 오늘 날짜: {today}, 수술 날짜: {operation_day}"""
     return msg
 
 def style_dataframe(df, color):
@@ -85,17 +86,26 @@ def page_input():
             st.write("#### 검사 결과를 바탕으로 한 종합 소견")
             if 'explain' not in st.session_state["patient_info"]:
                 st.session_state['patient_info']["explain"] = None
+                st.session_state['patient_info']["explain2"] = None
                 picked_info = pick_patient_info(info)
                 msg = {"role": "user", "content": picked_info}
                 with st.spinner('검사 결과를 바탕으로 진단을 내리는 중입니다...'):
                     explain = diagnosis_draft(msg)
+                    explain2 = diagnosis_draft_2(msg)
                 st.session_state["patient_info"]["explain"] = explain
+                st.session_state["patient_info"]["explain2"] = explain2
             else:
                 explain = st.session_state["patient_info"]["explain"]
+                explain2 = st.session_state["patient_info"]["explain2"]
             
             explain = explain.replace("#","")
-            st.write("**환자 상태에 관한 종합 소견**")
+            explain2 = explain2.replace("#","")
+            st.markdown('---')
+            st.write("**환자 상태에 관한 종합 소견(ver1)**")
             st.write(explain)
+            st.markdown('---')
+            st.write("**환자 상태에 관한 종합 소견(ver2)**")
+            st.write(explain2)
 
         # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
         if st.button("환자 정보 재등록"):
