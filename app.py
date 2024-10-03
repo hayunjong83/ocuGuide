@@ -10,6 +10,7 @@ st.set_page_config(
 from page1 import page_home
 from page2 import page_input
 from page3 import page_info
+from page3_2 import page_info_2
 from page4 import page_w_chatgpt
 from page5 import page_w_rag
 
@@ -35,14 +36,16 @@ def app():
         st.sidebar.markdown("## :male-doctor:백내장의 모든 것:female-doctor: OcuGUIDE ##")
         st.sidebar.image("ref/side_logo.png")
         page = st.sidebar.selectbox(
-            "원하시는 과정을 선택하세요", ["HOME", "👨‍⚕️ 환자정보 입력", "ℹ️ 백내장수술정보", "❔ Q&A [챗GPT]", "❓ Q&A [OcuGuide]"])
+            "원하시는 과정을 선택하세요", ["HOME", "👨‍⚕️ 환자정보 입력", "ℹ️ 백내장수술정보(비교1)", "ℹ️ 백내장수술정보(비교2)","❔ Q&A [챗GPT]", "❓ Q&A [OcuGuide]"])
 
         # Page content rendering based on selection
         if page == "HOME":
             page_home()
         elif page == "👨‍⚕️ 환자정보 입력":
             page_input()
-        elif page == "ℹ️ 백내장수술정보":
+        elif page == "ℹ️ 백내장수술정보(비교1)":
+            page_info_2()
+        elif page == "ℹ️ 백내장수술정보(비교2)":
             page_info()
         elif page == "❔ Q&A [챗GPT]":
             page_w_chatgpt()
