@@ -111,6 +111,9 @@ def reset_info():
         # Chatbot history reset
         st.session_state['messages'] = None
         st.session_state['rag_messages'] = None
+        # 페이지 3의 정보안내를 위한 설정
+        st.session_state['current_step'] = 0
+        st.session_state['progress'] = 0
         st.rerun()
 
 # 환자 정보 등록 과정
