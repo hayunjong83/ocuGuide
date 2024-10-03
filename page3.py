@@ -21,6 +21,7 @@ def page_info():
 
     if 'current_step' not in st.session_state:
         st.session_state['current_step'] = 0
+    if 'progress' not in st.session_state:
         st.session_state['progress'] = 0
 
     # # 단계 제목
