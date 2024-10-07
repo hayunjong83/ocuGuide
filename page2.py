@@ -82,30 +82,24 @@ def page_input():
                 if len(v) != 0:
                     st.markdown(f"- {k}: {v}")
 
-        with st.container(border=True):
-            st.write("#### 검사 결과를 바탕으로 한 종합 소견")
-            if 'explain' not in st.session_state["patient_info"]:
-                st.session_state['patient_info']["explain"] = None
-                st.session_state['patient_info']["explain2"] = None
+        # 검사결과를 바탕으로 종합소견을 생성하지만, 화면에 보여주지는 않는다.
+        if 'explain' not in st.session_state["patient_info"]:
+            st.session_state['patient_info']["explain"] = None
+
+            with st.spinner('검사 결과를 바탕으로 진단을 내리는 중입니다...'):
+                # 등록된 정보를 바탕으로, LLM 소견정보 생성
                 picked_info = pick_patient_info(info)
                 msg = {"role": "user", "content": picked_info}
-                with st.spinner('검사 결과를 바탕으로 진단을 내리는 중입니다...'):
-                    explain = diagnosis_draft(msg)
-                    explain2 = diagnosis_draft_2(msg)
+                explain = diagnosis_draft_2(msg)
+                
                 st.session_state["patient_info"]["explain"] = explain
-                st.session_state["patient_info"]["explain2"] = explain2
-            else:
-                explain = st.session_state["patient_info"]["explain"]
-                explain2 = st.session_state["patient_info"]["explain2"]
-            
-            explain = explain.replace("#","")
-            explain2 = explain2.replace("#","")
-            st.markdown('---')
-            st.write("**환자 상태에 관한 종합 소견(ver1)**")
-            st.write(explain)
-            st.markdown('---')
-            st.write("**환자 상태에 관한 종합 소견(ver2)**")
-            st.write(explain2)
+        else:
+            explain = st.session_state["patient_info"]["explain"]
+        
+        st.success(' 환자정보가 등록되었습니다. 이제 :red[**백내장 수술정보**]로 이동하실 수 있습니다.', icon="✅")
+    
+        explain = explain.replace("#","")
+        st.markdown('---')
 
         # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
         if st.button("환자 정보 재등록"):
