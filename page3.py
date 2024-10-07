@@ -152,7 +152,7 @@ def page_info():
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
     # elif active_tab == step1:   
-        sppech_example()
+        # sppech_example()
         with st.container():
 
             st.subheader("정보 1) 백내장 및 백내장 수술")
