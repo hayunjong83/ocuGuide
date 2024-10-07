@@ -1,5 +1,5 @@
 import streamlit as st
-from helper import autoplay_audio
+from helper import autoplay_audio, stop_audio, stream_partial_data
 from page2 import supabase
 import time
 
@@ -152,6 +152,7 @@ def page_info():
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
     # elif active_tab == step1:   
+        sppech_example()
         with st.container():
 
             st.subheader("정보 1) 백내장 및 백내장 수술")
@@ -566,3 +567,49 @@ def personalized_diagnosis(diag, patient_name):
         sentence += "저희 세브란스 안과 병원 의료진은 이러한 위험요인(들)을 충분히 숙지하고 준비하겠습니다."
 
     return sentence
+
+def sppech_example():
+    script = [
+        {"text": " - 백내장이란 노화에 의해 ‘카메라의 렌즈에 해당하는 수정체’에 혼탁이 생기는 것입니다.", "time": 0.5},
+        {"text": " - 40~50대 이상부터는 필연적으로 백내장이 생기게 되지만 모든 사람들이 수술을 바로 해야하는 것은 아니고, 백내장으로 인한 시력저하 등 불편감이 생길 때 수술을 고려하게 됩니다.", "time": 7.8},
+        {"text": " - 예외적으로 굉장히 심한 백내장을 제외하고는 백내장의 정해진 수술시기는 없습니다.", "time": 20},
+        {"text": " - 즉 환자가 원하는 시기에 진행하면 됩니다.", "time": 27},
+        {"text": " - 백내장 수술은 다음과 같은 상황에서 고려하게 됩니다. 1) 객관적으로 백내장 진행정도가 심하거나 2) 주관적으로 환자의 불편감이 심할 때", "time": 31},
+        {"text": "                                           ", "time": 43},
+    ]
+    full_text_container = st.empty()
+    stream_text_container = st.empty()
+
+    if st.session_state["speech_mode"] == True:
+        stop_audio()
+        autoplay_audio('./ref/contents/info_1_1.mp3')
+        stream_example(script, stream_text_container, full_text_container)
+        
+        # if st.button("다시듣기", use_container_width=True):
+        #     stop_audio()
+        #     stream_text_container.empty()  # 스트리밍된 텍스트 영역 비우기
+        #     full_text_container.empty()
+        #     st.session_state["speech_mode"] == False
+        #     st.session_state["speech_mode"] == True
+        #     # stream_example(script, stream_text_container, full_text_container)
+        time.sleep(1)
+        full_text_container.empty()
+        stream_text_container.empty()
+        
+def stream_example(script, stream_text_container, full_text_container):
+    start_time = time.time()
+    # autoplay_audio('./ref/contents/info_1_1.mp3')
+    full_text = ""
+
+    for sent in script:
+        # 대사가 나오는 시간까지 대기
+        while time.time() - start_time < sent["time"]:
+            time.sleep(0.1)
+
+        # 스트리밍 텍스트 출력
+        for partial_text in stream_partial_data(sent["text"]):
+            stream_text_container.markdown(partial_text, unsafe_allow_html=True)  # 새로운 박스에 출력
+
+        # 대사가 끝나면 전체 텍스트 영역에 덮어쓰기
+        full_text += sent["text"] + "\n\n"
+        full_text_container.markdown(full_text, unsafe_allow_html=True)

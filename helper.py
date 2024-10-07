@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import base64
+import time
 from openai import OpenAI
 from langsmith.wrappers import wrap_openai
 from langsmith import traceable
@@ -57,6 +58,25 @@ def autoplay_audio(file_path: str):
             md,
             unsafe_allow_html=True,
         )
+
+# 오디오 정지 함수
+def stop_audio():
+    st.markdown("""
+    <script>
+    var audio = document.getElementById('audio-player');
+    if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    </script>
+    """, unsafe_allow_html=True)
+
+def stream_partial_data(text):
+    full_text = ""
+    for char in text:
+        full_text += f'<span style="color:red; font-size:2vh;">{char}</span>'
+        yield full_text
+        time.sleep(0.1)
 
 # 환자 정보에 맞는 진단
 @traceable
@@ -130,7 +150,7 @@ def diagnosis_draft_2(msg):
          상태입니다. 따라서 백내장 수술의 난이도가 높고 수술의 범위가 커질 가능성이 있습니다.
          5-2) 하위항목에 "심한 백내장"이 포함된 경우
          심한 백내장을 제거하는 과정에서 나타나는 각막부종으로 인한 시력호전에 제한이 있을 수 있습니다.
-
+    
          지금부터 아래의 지시사항에 따라서, 답변을 생성합니다.
          #지시사항(instructions)
         1. 환자가 불안하지 않도록 친절하게 답변합니다.
