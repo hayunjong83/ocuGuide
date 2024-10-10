@@ -5,6 +5,7 @@ import time
 import base64
 from streamlit_calendar import calendar
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 def autoplay_audio(file_path: str):
     with open(file_path, "rb") as f:
@@ -491,11 +492,15 @@ def page_info():
             st.write("---")
             st.subheader(f"{patient_name}님의 수술 전후 스케줄")
             surgery_date = st.session_state['patient_info']["surgery_date"].strftime("%Y-%m-%d")
+            surgery_time = st.session_state['patient_info']["surgery_time"].strftime("%H-%M-%S")
+            
             day_before = (st.session_state['patient_info']["surgery_date"] - timedelta(days=1)).strftime("%Y-%m-%d")
             day_after = (st.session_state['patient_info']["surgery_date"] + timedelta(days=1)).strftime("%Y-%m-%d")
+            week_after = (st.session_state['patient_info']["surgery_date"] + timedelta(weeks=1)).strftime("%Y-%m-%d")
+            month_after = (st.session_state['patient_info']["surgery_date"] + relativedelta(months=1)).strftime("%Y-%m-%d")
             
             calendar_options = {
-            "editable": "true",
+            "editable": "False",
             "navLinks": "true",
             "selectable": "true",
             "headerToolbar": {
@@ -518,24 +523,40 @@ def page_info():
             events.append({
                 "title": "수술",
                 "color": "#FF6C6C",
-                "start": surgery_date + "T08:30:00",
-                "end": surgery_date + "T10:00:00",
+                "start": surgery_date + "T" + surgery_time,
+                "end": surgery_date + "T" + str(int(surgery_time[:2]) + 1) + surgery_time[2:],
             })
 
             # 수술 하루전 
             events.append({
-                "title": "수술 하루전",
+                "title": "수술 하루 전",
                 "color": "#FFBD45",
                 "start": day_before,
                 "end": day_before,
             })
 
-            # 수술 하루후 
+            # 수술 하루 후 
             events.append({
-                "title": "수술 하루후",
+                "title": "수술 하루 후",
                 "color": "#FFBD45",
                 "start": day_after,
                 "end": day_after,
+            })
+
+            # 수술 일주일 뒤
+            events.append({
+                "title": "수술 일주일 뒤",
+                "color": "blue",
+                "start": week_after,
+                "end": week_after,
+            })
+
+            # 수술 한달 뒤
+            events.append({
+                "title": "수술 한달 뒤",
+                "color": "green",
+                "start": month_after,
+                "end": month_after,
             })
 
             state = calendar(
@@ -559,12 +580,17 @@ def page_info():
             # st.write(state)
 
             st.write(f"""
-            - **{day_before}**) 수술 하루 전 : 내원 시간 안내
+            - **{day_before}**) **수술 하루 전** : 내원 시간 안내
             - **{surgery_date}**) :red[**수술 당일**] 
                 + 아침까지 약 복용
                 + 당일 입원 & 당일 퇴원
                 + 일주일 간 세수, 샤워 불가능
-            - **{day_after}**) 외래 내원 (수술 후 상태확인)
+            - **{day_after}**) **수술 하루 뒤** : 외래 내원 (수술 후 상태확인)
+            - **{week_after}**) **수술 일주일 뒤** : 외래 내원 (수술 후 상태확인)
+                + 세수, 샤워 가능
+            - **{month_after}**) **수술 한달 뒤** : 외래 내원 (수술 후 상태확인)
+                + 안약 중단
+                + 수술 후 도수 및 시력이 안정화되는 시기
 """
             )
 
