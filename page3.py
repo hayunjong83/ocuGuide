@@ -179,10 +179,17 @@ def page_info():
         """
         #### Q. 백내장이란 무엇인가요?
 
-        - 백내장이란 노화에 의해 **‘카메라의 렌즈'**에 해당하는 **'수정체’**에 **혼탁이 생기는 것**입니다.
+        - 백내장이란 **카메라의 렌즈**에 해당하는 **수정체**에 **혼탁이 생기는 것**입니다.
         - 가장 큰 원인은 노화이며, 이 외에도 감염이나 염증, 외상에 의해서도 발생할 수 있습니다.
         - 백내장을 치료할 수 있는 약제는 없으며, 따라서 백내장은 반드시 수술적 치료를 해야하는 질환입니다.
         """)
+            col1_1_l, col1_1_c, col1_1_r = st.columns([1, 2, 1])
+            with col1_1_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q1_1', use_container_width=True):
+                    autoplay_audio('./ref/contents/q1_1.mp3')
+            with col1_1_r:
+                if st.button("듣기 중단", key='q1_1_stop', use_container_width=True):
+                    stop_audio()
 
             # 내용 1-2
             st.markdown(
@@ -193,7 +200,15 @@ def page_info():
         1) 백내장이 생긴 **혼탁해진 수정체를 제거**합니다. (Phacoemulsification)
         2) 수정체 역할을 대신할 **인공수정체를 넣습니다.** (IOL implantation)
         """)
-            
+            col1_2_l, col1_2_c, col1_2_r = st.columns([1, 2, 1])
+            with col1_2_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q1_2', use_container_width=True):
+                    autoplay_audio('./ref/contents/q1_2.mp3')
+            with col1_2_r:
+                if st.button("듣기 중단", key='q1_2_stop', use_container_width=True):
+                    stop_audio()
+
+
             # 내용 1-3
             st.markdown(
         """
@@ -201,7 +216,14 @@ def page_info():
 
         - 평균적으로 :red[**약 20~30분**] 정도 소요되나, 수술의 **난도가 높거나 수술 중 합병증이 발생하면 더 길어질 수 있습니다.** 
         """)
-            
+            col1_3_l, col1_3_c, col1_3_r = st.columns([1, 2, 1])
+            with col1_3_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q1_3', use_container_width=True):
+                    autoplay_audio('./ref/contents/q1_3.mp3')
+            with col1_3_r:
+                if st.button("듣기 중단", key='q1_3_stop', use_container_width=True):
+                    stop_audio()
+
             # 내용 1-4
             st.markdown(
         """
@@ -211,7 +233,15 @@ def page_info():
         - **예외적으로 협조가 어려운 환자의 경우에는 전신마취로 진행**해야 할 수 있습니다.
         - 수술 중에는 최대한 움직이지 않아야 합니다. 눈을 가만히 있기 어렵거나, 30분 정도 누워있기어려운 경우, **폐쇄공포증**이 있는 경우에는 주치의에게 꼭 말씀해주시길 바랍니다. 
         """)
+            col1_4_l, col1_4_c, col1_4_r = st.columns([1, 2, 1])
+            with col1_4_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q1_4', use_container_width=True):
+                    autoplay_audio('./ref/contents/q1_4.mp3')
+            with col1_4_r:
+                if st.button("듣기 중단", key='q1_4_stop', use_container_width=True):
+                    stop_audio()
 
+            st.markdown('---')
             # 추가 영상
             with st.expander("백내장 수술영상"):
                 st.markdown("### 백내장 수술 영상")
@@ -266,7 +296,14 @@ def page_info():
         - **수술 후에는 인공수정체의 교체가 어렵기 때문에**, 개개인의 연령 및 눈 상태에 따라 알맞은 인공수정체를 결정하는 것이 중요합니다.  
         **인공수정체 결정은 주치의선생님의 설명을 충분히 들은후에 결정하시기 바랍니다.**
         """)
-            
+            col2_1_l, col2_1_c, col2_1_r = st.columns([1, 2, 1])
+            with col2_1_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q2_1', use_container_width=True):
+                    autoplay_audio('./ref/contents/q2_1.mp3')
+            with col2_1_r:
+                if st.button("듣기 중단", key='q2_1_stop', use_container_width=True):
+                    stop_audio()
+
             disable_step_2_again = True if st.session_state['progress'] > 2 else False
             unlock_step_3 = st.button("확인하였습니다.", key="to_step_3", disabled=disable_step_2_again)
             if unlock_step_3:
@@ -295,7 +332,14 @@ def page_info():
         안경이 필요할 경우 이 시기에 처방을 받으시면 됩니다.
         - 망막질환, 녹내장 등 기저 안질환이 동반되어 있는 경우에는 시력 회복이 제한될 수 있습니다.
         """)
-            
+            col3_1_l, col3_1_c, col3_1_r = st.columns([1, 2, 1])
+            with col3_1_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q3_1', use_container_width=True):
+                    autoplay_audio('./ref/contents/q3_1.mp3')
+            with col3_1_r:
+                if st.button("듣기 중단", key='q3_1_stop', use_container_width=True):
+                    stop_audio()
+                    
             # 내용 3-2
             st.markdown(
         """
@@ -305,6 +349,13 @@ def page_info():
         다만, 과도한 운동이나 심하게 고개를 숙이는 자세 등은 삼가야 합니다.
         - **세수와 샤워는 일주일 뒤부터 가능하며, 수영장이나 목욕탕 이용은 한달 뒤부터 가능합니다.**
         """)
+            col3_2_l, col3_2_c, col3_2_r = st.columns([1, 2, 1])
+            with col3_2_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q3_2', use_container_width=True):
+                    autoplay_audio('./ref/contents/q3_2.mp3')
+            with col3_2_r:
+                if st.button("듣기 중단", key='q3_2_stop', use_container_width=True):
+                    stop_audio()
             
             # 내용 3-3
             st.markdown(
@@ -314,7 +365,14 @@ def page_info():
         - 일반적으로 수술 후에는 항생제, 항염증제 등 **안약을 1~2달간 사용**하게 됩니다.
         - 회복 경과에 따라 안약을 더 오래 사용해야 하거나 추가해야 할 수 있습니다. 
         """)
-            
+            col3_3_l, col3_3_c, col3_3_r = st.columns([1, 2, 1])
+            with col3_3_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q3_3', use_container_width=True):
+                    autoplay_audio('./ref/contents/q3_3.mp3')
+            with col3_3_r:
+                if st.button("듣기 중단", key='q3_3_stop', use_container_width=True):
+                    stop_audio()
+                    
             # 내용 3-4
             st.markdown(
         """
@@ -322,6 +380,13 @@ def page_info():
 
         - 특별한 문제가 없다면 수술일 기준 **다음날, 1주일, 1개월, 3-6개월 주기로 내원**하게 됩니다.
         """)
+            col3_4_l, col3_4_c, col3_4_r = st.columns([1, 2, 1])
+            with col3_4_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q3_4', use_container_width=True):
+                    autoplay_audio('./ref/contents/q3_4.mp3')
+            with col3_4_r:
+                if st.button("듣기 중단", key='q3_4_stop', use_container_width=True):
+                    stop_audio()
             
             disable_step_3_again = True if st.session_state['progress'] > 3 else False
             unlock_step_4 = st.button("확인하였습니다.", key="to_step_4", disabled=disable_step_3_again)
@@ -345,7 +410,7 @@ def page_info():
         - 백내장 수술의 부작용은 크게 '수술 중 합병증'과 '수술 후 부작용/합병증' 으로 나눌 수 있습니다.
 
         1) 수술 중 합병증
-            - 백내장 수술 도중 발생할 수 있는 합병증은 여러가지가 있으나 가장 중요한 합병증은 **후낭파열 (Posterior capsular rupture)** 과 **유리체탈출 (Vitreous prolapse)**입니다. 
+            - 백내장 수술 도중 발생할 수 있는 합병증은 여러가지가 있으나 가장 중요한 합병증은 **후낭파열 (Posterior capsular rupture)** 과 **유리체 탈출**(Vitreous prolapse)입니다. 
             - 백내장 수술과정의 약 5%에서 나타날 수 있는 합병증이며, 특히 난도가 높은 백내장 수술에서 발생 확률이 증가합니다.
             - 이러한 경우에는 유리체절제술이라는 추가 수술이 필요할 수 있으며, 삽입되는 인공수정체의 종류나 위치가 달라질 수 있습니다.
 
@@ -377,6 +442,13 @@ def page_info():
                 + 이는 수술 이후에 자연스럽게 생길 수 있는 합병증으로 재수술이 아닌 간단한 ‘YAG 레이져 시술’을 통해 제거할 수 있습니다.
 
         """)
+            col4_1_l, col4_1_c, col4_1_r = st.columns([1, 2, 1])
+            with col4_1_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q4_1', use_container_width=True):
+                    autoplay_audio('./ref/contents/q4_1.mp3')
+            with col4_1_r:
+                if st.button("듣기 중단", key='q4_1_stop', use_container_width=True):
+                    stop_audio()
             
             disable_step_4_again = True if st.session_state['progress'] > 4 else False
             unlock_step_5 = st.button("확인하였습니다.", key="to_step_5", disabled=disable_step_4_again)
@@ -402,6 +474,13 @@ def page_info():
         - 그러나 전신마취가 필요한 경우, 건강 상태가 좋지 않아 여러 번의 수술이 어려운 경우 등에는 양쪽 눈을 동시에 수술하기도 합니다
 
         """)
+            col5_1_l, col5_1_c, col5_1_r = st.columns([1, 2, 1])
+            with col5_1_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q5_1', use_container_width=True):
+                    autoplay_audio('./ref/contents/q5_1.mp3')
+            with col5_1_r:
+                if st.button("듣기 중단", key='q5_1_stop', use_container_width=True):
+                    stop_audio()
             
             # 내용 5-2
             st.markdown(
@@ -412,6 +491,13 @@ def page_info():
         - 수술 중 합병증이 발생하거나 전신마취로 수술이 진행되는 경우에는 필요에 따라 추가적인 입원 치료가 필요할 수 있습니다.
 
         """)
+            col5_2_l, col5_2_c, col5_2_r = st.columns([1, 2, 1])
+            with col5_2_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q5_2', use_container_width=True):
+                    autoplay_audio('./ref/contents/q5_2.mp3')
+            with col5_2_r:
+                if st.button("듣기 중단", key='q5_2_stop', use_container_width=True):
+                    stop_audio()
 
             # 내용 5-3
             st.markdown(
@@ -423,6 +509,13 @@ def page_info():
         - 일반적으로 **수술 1-2시간 전에 도착**하여 산동제를 점안하기 시작하며, 충분히 산동 된 것을 확인한 후 수술을 진행하게 됩니다.
         - 수술 후에는 충분히 휴식 후, 담당 간호사에게 주의사항 및 퇴원약 안내를 받고 퇴원하게 됩니다.
         """)
+            col5_3_l, col5_3_c, col5_3_r = st.columns([1, 2, 1])
+            with col5_3_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q5_3', use_container_width=True):
+                    autoplay_audio('./ref/contents/q5_3.mp3')
+            with col5_3_r:
+                if st.button("듣기 중단", key='q5_3_stop', use_container_width=True):
+                    stop_audio()
             
             # 내용 5-4
             st.markdown(
@@ -432,6 +525,13 @@ def page_info():
         - 혈압약, 당뇨약, 항응고제 등 대부분의 약제는 수술 당일에도 복용 가능합니다. 다만, 일부 환자의 경우에는 백내장 수술에 영향을 미치는 약제가 있을 수 있으므로, 수술 전 주치의나 수술 코디네이터에게 꼭 알려주시기 바랍니다.
 
         """)
+            col5_4_l, col5_4_c, col5_4_r = st.columns([1, 2, 1])
+            with col5_4_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q5_4', use_container_width=True):
+                    autoplay_audio('./ref/contents/q5_4.mp3')
+            with col5_4_r:
+                if st.button("듣기 중단", key='q5_4_stop', use_container_width=True):
+                    stop_audio()
             
             disable_step_5_again = True if st.session_state['progress'] > 5 else False
             unlock_step_6 = st.button("확인하였습니다.", key="to_step_6", disabled=disable_step_5_again)
