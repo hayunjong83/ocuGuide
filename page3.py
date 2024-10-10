@@ -169,7 +169,75 @@ def page_info():
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
     # elif active_tab == step1:   
-        # sppech_example()
+        if st.session_state["speech_mode"] == True:
+            up1, _ = st.columns([1,3])
+            with up1:
+                stop_audio_btn = st.button("음성 모드 중지", key="up1", use_container_width=True)
+            
+            audio_files = ['./ref/contents/q1_1.mp3', './ref/contents/q1_2.mp3', './ref/contents/q1_3.mp3', './ref/contents/q1_4.mp3']
+            script1 = [
+                {"text": "#### Q. 백내장이란 무엇인가요?  \n\n", "time": 0},
+                {"text": "- 백내장이란 **카메라의 렌즈**에 해당하는 **수정체**에 **혼탁이 생기는 것**입니다.\n", "time": 2},
+                {"text": "- 가장 큰 원인은 노화이며, 이 외에도 감염이나 염증, 외상에 의해서도 발생할 수 있습니다.\n", "time": 8},
+                {"text": "- 백내장을 치료할 수 있는 약제는 현재 없으며, 따라서 백내장은 반드시 수술적 치료를 해야하는 질환입니다.\n", "time": 16},
+                {"text": "\n", "time": 25}
+            ]
+            script2 = [
+                {"text": "#### Q. 백내장 수술은 어떻게 진행되나요?  \n\n", "time": 0},
+                {"text": "백내장 수술은 다음과 같은 2가지 과정으로 이루어집니다. \n", "time": 3},
+                {"text": "1) 백내장이 생긴 **혼탁해진 수정체를 제거**합니다.\n", "time": 8},
+                {"text": "2) 수정체 역할을 대신할 **인공수정체를 넣습니다.**\n", "time": 14},
+                {"text": "\n", "time": 17}
+            ]
+            script3 = [
+                {"text": "#### Q. 백내장 수술시간은 어느정도 되나요?  \n\n", "time": 0},
+                {"text": "- 평균적으로 **약 20~30분** 정도 소요되나, 수술의 **난도가 높거나 수술 중 합병증이 발생하면 더 길어질 수 있습니다.\n", "time": 3},
+                {"text": "\n", "time": 14}
+            ]
+            script4 = [
+                {"text": "#### Q. 백내장 수술 시 마취는 어떠한 방식으로 하나요?  \n\n", "time": 0},
+                {"text": "- 일반적으로 안약을 통한 점안 마취 및 국소마취로 진행됩니다.\n", "time": 4},
+                {"text": "- **예외적으로 협조가 어려운 환자의 경우에는 전신마취로 진행**해야 할 수 있습니다.\n", "time": 9},
+                {"text": "-- 수술 중에는 최대한 움직이지 않아야 합니다. 눈을 가만히 있기 어렵거나, 30분 정도 누워있기어려운 경우, **폐쇄공포증**이 있는 경우에는 주치의에게 꼭 말씀해주시길 바랍니다. \n", "time": 15},
+                {"text": "\n", "time": 30}
+            ]
+            scripts = [script1, script2, script3, script4]
+
+            full_text_container = st.empty()
+            full_text = ""
+            stream_text_container = st.empty()
+
+            for audio_file, script in zip(audio_files, scripts):
+                autoplay_audio(audio_file)
+                if stop_audio_btn:
+                    st.session_state["speech_mode"] = False
+                    st.rerun()
+                    stop_audio()
+                start_time = time.time()
+                for item in script:
+                    while time.time() - start_time < item["time"]:
+                        time.sleep(0.1)
+                    
+                    for data in stream_partial_data([item]):
+                        if stop_audio_btn:
+                            stop_audio()
+                            break
+                        stream_text_container.markdown(data, unsafe_allow_html=True)
+                    
+                    if stop_audio_btn:
+                        stop_audio()
+                        break
+                    time.sleep(0.5)
+                    stream_text_container.empty()
+                    full_text += item["text"]
+                    full_text_container.markdown(full_text, unsafe_allow_html=True)
+
+                if stop_audio_btn:
+                        stop_audio()
+                        break
+            stream_text_container.empty()
+            full_text_container.empty()
+
         with st.container():
 
             st.subheader("정보 1) 백내장의 정의, 수술 과정")
@@ -985,7 +1053,7 @@ def stream_partial_data(script):
         for char in item['text']:
             full_text += f'<span>{char}</span>'
             yield full_text
-            time.sleep(0.05)
+            time.sleep(0.1)
 
 def sppech_example():
     script = [
