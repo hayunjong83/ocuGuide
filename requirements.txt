@@ -13,3 +13,4 @@ langchain_openai
 pinecone[grpc]
 pinecone-client==5.0.1
 langchain-pinecone==0.2.0
+streamlit-calendar

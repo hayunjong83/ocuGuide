@@ -3,6 +3,8 @@ import streamlit as st
 from page2 import supabase
 import time
 import base64
+from streamlit_calendar import calendar
+from datetime import datetime, timedelta
 
 def autoplay_audio(file_path: str):
     with open(file_path, "rb") as f:
@@ -166,7 +168,7 @@ def page_info():
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
     # elif active_tab == step1:   
-        sppech_example()
+        # sppech_example()
         with st.container():
 
             st.subheader("정보 1) 백내장의 정의, 수술 과정")
@@ -458,9 +460,9 @@ def page_info():
             """)
 
             st.write("---")
+            diag = st.session_state['patient_info']['diagnosis']
+            patient_name = st.session_state['patient_info']['patient_name']
             with st.container():
-                diag = st.session_state['patient_info']['diagnosis']
-                patient_name = st.session_state['patient_info']['patient_name']
                 # st.write(st.session_state['patient_info']['diagnosis'])
                 st.subheader(f"{patient_name}님의 백내장 수술 전 요약")
                 contents = personalized_diagnosis(diag, patient_name)
@@ -485,6 +487,87 @@ def page_info():
                 #             raw = res.data[0]['explain'].replace("{patient}", patient_name)
                 #             st.write(raw)
                 #             st.write("---")
+            
+            st.write("---")
+            st.subheader(f"{patient_name}님의 수술 전후 스케줄")
+            surgery_date = st.session_state['patient_info']["surgery_date"].strftime("%Y-%m-%d")
+            day_before = (st.session_state['patient_info']["surgery_date"] - timedelta(days=1)).strftime("%Y-%m-%d")
+            day_after = (st.session_state['patient_info']["surgery_date"] + timedelta(days=1)).strftime("%Y-%m-%d")
+            
+            calendar_options = {
+            "editable": "true",
+            "navLinks": "true",
+            "selectable": "true",
+            "headerToolbar": {
+                        "left": "today prev,next",
+                        "center": "title",
+                        "right": "dayGridDay,dayGridWeek,dayGridMonth",
+                    },
+            "initialDate": datetime.today().strftime("%Y-%m-%d"),
+            "initialView": "dayGridMonth"
+            }
+
+            # 수술 당일
+            events= []
+            events.append({
+                "title": "수술 당일",
+                "color": "#FF6C6C",
+                "start": surgery_date,
+                "end": surgery_date,
+            })
+            events.append({
+                "title": "수술",
+                "color": "#FF6C6C",
+                "start": surgery_date + "T08:30:00",
+                "end": surgery_date + "T10:00:00",
+            })
+
+            # 수술 하루전 
+            events.append({
+                "title": "수술 하루전",
+                "color": "#FFBD45",
+                "start": day_before,
+                "end": day_before,
+            })
+
+            # 수술 하루후 
+            events.append({
+                "title": "수술 하루후",
+                "color": "#FFBD45",
+                "start": day_after,
+                "end": day_after,
+            })
+
+            state = calendar(
+                events=events,
+                options=calendar_options,
+                custom_css="""
+                .fc-event-past {
+                    opacity: 0.8;
+                }
+                .fc-event-time {
+                    font-style: italic;
+                }
+                .fc-event-title {
+                    font-weight: 700;
+                }
+                .fc-toolbar-title {
+                    font-size: 2rem;
+                }
+                """
+            )
+            # st.write(state)
+
+            st.write(f"""
+            - **{day_before}**) 수술 하루 전 : 내원 시간 안내
+            - **{surgery_date}**) :red[**수술 당일**] 
+                + 아침까지 약 복용
+                + 당일 입원 & 당일 퇴원
+                + 일주일 간 세수, 샤워 불가능
+            - **{day_after}**) 외래 내원 (수술 후 상태확인)
+"""
+            )
+
     
     st.markdown('---')
     disable_back_button = True if st.session_state['current_step'] == 0 else False
