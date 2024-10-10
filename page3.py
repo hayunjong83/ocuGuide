@@ -30,6 +30,13 @@ def stop_audio():
     </script>
     """, unsafe_allow_html=True)
 
+def stream_partial_data(script):
+    full_text = ""
+    for item in script:
+        for char in item['text']:
+            full_text += f'<span>{char}</span>'
+            yield full_text
+            time.sleep(0.1)
 
 def set_form_step(action,step=None):
     if action == 'Next':
@@ -1046,81 +1053,3 @@ def find_cat_3(l_retina, l_nerve):
         cat_3 = "망막 및 녹내장"
 
     return cat_3
-
-def stream_partial_data(script):
-    full_text = ""
-    for item in script:
-        for char in item['text']:
-            full_text += f'<span>{char}</span>'
-            yield full_text
-            time.sleep(0.1)
-
-def sppech_example():
-    script = [
-        {"text": " - :red[백내장이란 노화에 의해 ‘카메라의 렌즈에 해당하는 수정체’에 혼탁이 생기는 것입니다.]", "time": 0.5},
-        {"text": " - 40~50대 이상부터는 필연적으로 백내장이 생기게 되지만 모든 사람들이 수술을 바로 해야하는 것은 아니고, 백내장으로 인한 시력저하 등 불편감이 생길 때 수술을 고려하게 됩니다.", "time": 7.8},
-        {"text": " - 예외적으로 굉장히 심한 백내장을 제외하고는 백내장의 정해진 수술시기는 없습니다.", "time": 20},
-        {"text": " - 즉 환자가 원하는 시기에 진행하면 됩니다.", "time": 27},
-        {"text": " - 백내장 수술은 다음과 같은 상황에서 고려하게 됩니다. 1) 객관적으로 백내장 진행정도가 심하거나 2) 주관적으로 환자의 불편감이 심할 때", "time": 31},
-        {"text": "                                           ", "time": 43},
-    ]
-    full_text_container = st.empty()
-    stream_text_container = st.empty()
-    
-    if st.session_state["speech_mode"] == True:
-        autoplay_audio("./ref/contents/info_1_1.mp3")
-        text_container = st.empty()
-
-        # 중지 버튼을 먼저 렌더링
-        stop_audio_btn = st.button("Stop Audio")
-        if stop_audio_btn:
-            st.session_state["speech_mode"] = False
-            st.rerun()
-            stop_audio()
-        start_time = time.time()
-
-        for item in script:
-            while time.time() - start_time < item["time"]:
-                time.sleep(0.1)
-            
-            for data in stream_partial_data([item]):
-                if stop_audio_btn:
-                    stop_audio()
-                    break
-                text_container.markdown(data, unsafe_allow_html=True)
-            
-            if stop_audio_btn:
-                stop_audio()
-                break
-        
-        text_container.empty()
-        all_text = "\n\n".join([item["text"] for item in script])
-        st.write(all_text)
-    
-    else:
-        # 자동 재생 비활성화 모드
-        st.write("전체 스크립트:")
-        all_text = "\n\n".join([item["text"] for item in script])
-        st.write(all_text)
-        
-        # 오디오 재생 버튼 추가
-        if st.button("Play Audio"):
-            autoplay_audio("ref/contents/info_1_1.mp3")
-
-def stream_example(script, stream_text_container, full_text_container):
-    start_time = time.time()
-    # autoplay_audio('./ref/contents/info_1_1.mp3')
-    full_text = ""
-
-    for sent in script:
-        # 대사가 나오는 시간까지 대기
-        while time.time() - start_time < sent["time"]:
-            time.sleep(0.1)
-
-        # 스트리밍 텍스트 출력
-        for partial_text in stream_partial_data(sent["text"]):
-            stream_text_container.markdown(partial_text, unsafe_allow_html=True)  # 새로운 박스에 출력
-
-        # 대사가 끝나면 전체 텍스트 영역에 덮어쓰기
-        full_text += sent["text"] + "\n\n"
-        full_text_container.markdown(full_text, unsafe_allow_html=True)
