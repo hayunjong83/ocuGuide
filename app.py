@@ -34,19 +34,33 @@ def app():
         
         st.sidebar.markdown("## :male-doctor:백내장의 모든 것:female-doctor: OcuGUIDE ##")
         st.sidebar.image("ref/side_logo.png")
-        page = st.sidebar.selectbox(
-            "원하시는 과정을 선택하세요", ["HOME", "👨‍⚕️ 환자정보 입력", "ℹ️ 백내장수술정보","❔ Q&A [챗GPT]", "❓ Q&A [OcuGuide]"])
+        if 'page' not in st.session_state:
+            st.session_state["page"] = "HOME"
 
-        # Page content rendering based on selection
+        menu = ["HOME", "👨‍⚕️ 환자정보 입력", "ℹ️ 백내장수술정보","❔ Q&A [챗GPT]", "❓ Q&A [OcuGuide]"]
+        page = st.sidebar.selectbox("원하시는 과정을 선택하세요", menu, index=menu.index(st.session_state.page))
+
         if page == "HOME":
-            page_home()
+            st.session_state["page"]= "HOME"
         elif page == "👨‍⚕️ 환자정보 입력":
-            page_input()
+            st.session_state["page"] = "👨‍⚕️ 환자정보 입력"
         elif page == "ℹ️ 백내장수술정보":
-            page_info()
+            st.session_state["page"]= "ℹ️ 백내장수술정보"
         elif page == "❔ Q&A [챗GPT]":
-            page_w_chatgpt()
+            st.session_state["page"] = "❔ Q&A [챗GPT]"
         elif page == "❓ Q&A [OcuGuide]":
+            st.session_state["page"] = "❓ Q&A [OcuGuide]"
+
+        # rendering
+        if st.session_state["page"] == "HOME":
+            page_home()
+        elif st.session_state["page"] == "👨‍⚕️ 환자정보 입력":
+            page_input()
+        elif st.session_state["page"] == "ℹ️ 백내장수술정보":
+            page_info()
+        elif st.session_state["page"] == "❔ Q&A [챗GPT]":
+            page_w_chatgpt()
+        elif st.session_state["page"] == "❓ Q&A [OcuGuide]":
             page_w_rag()
         
         if 'speech_mode' not in st.session_state:

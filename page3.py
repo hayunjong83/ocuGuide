@@ -69,64 +69,64 @@ def page_info():
 
 
     step_cols= st.columns([1, 1, 1, 1, 1, 1, 2])
-    step_cols_below_1 = st.columns([1, 1, 1])
-    step_cols_below_2 = st.columns([1, 1, 1])
+    step_cols_below_1 = st.columns([1.1, 0.8, 1.2])
+    step_cols_below_2 = st.columns([1.2, 0.9, 0.9])
     
     step_cols[0].button('개요', on_click=set_form_step, args=['Jump', 0], type=step0_type, use_container_width=True)
     able_step_1 = True if st.session_state['progress'] < 1 else False
     # step_cols[1].button('정보 1', on_click=set_form_step, args=['Jump', 1], type=step1_type, disabled=able_step_1)
-    step_cols_below_1[0].button('**정보 1**', on_click=set_form_step, args=['Jump', 1], type=step1_type, disabled=able_step_1, use_container_width=True)
-    step_cols_below_1[0].markdown(
-        """
-        <p style='text-align: center; margin-top: -10px;'>
-            백내장의 정의, 수술 과정
-        </p>
-        """, unsafe_allow_html=True)
+    step_cols_below_1[0].button('**1.백내장의 정의, 수술 과정**', on_click=set_form_step, args=['Jump', 1], type=step1_type, disabled=able_step_1, use_container_width=True)
+    # step_cols_below_1[0].markdown(
+    #     """
+    #     <p style='text-align: center; margin-top: -10px;'>
+    #         백내장의 정의, 수술 과정
+    #     </p>
+    #     """, unsafe_allow_html=True)
     able_step_2 = True if st.session_state['progress'] < 2 else False
     # step_cols[2].button('정보 2', on_click=set_form_step, args=['Jump', 2], type=step2_type, disabled=able_step_2)
-    step_cols_below_1[1].button('**정보 2**', on_click=set_form_step, args=['Jump', 2], type=step2_type, disabled=able_step_2, use_container_width=True)
-    step_cols_below_1[1].markdown(
-        """
-        <p style='text-align: center; margin-top: -10px;'>
-            인공수정체 결정
-        </p>
-        """, unsafe_allow_html=True)
+    step_cols_below_1[1].button('**2.인공수정체 결정**', on_click=set_form_step, args=['Jump', 2], type=step2_type, disabled=able_step_2, use_container_width=True)
+    # step_cols_below_1[1].markdown(
+    #     """
+    #     <p style='text-align: center; margin-top: -10px;'>
+    #         인공수정체 결정
+    #     </p>
+    #     """, unsafe_allow_html=True)
     able_step_3 = True if st.session_state['progress'] < 3 else False
     # step_cols[3].button('정보 3', on_click=set_form_step, args=['Jump', 3], type=step3_type, disabled=able_step_3)
-    step_cols_below_1[2].button('**정보 3**', on_click=set_form_step, args=['Jump', 3], type=step3_type, disabled=able_step_3, use_container_width=True)
-    step_cols_below_1[2].markdown(
-        """
-        <p style='text-align: center; margin-top: -10px;'>
-            백내장 수술 후 시력, 일상생활
-        </p>
-        """, unsafe_allow_html=True)
+    step_cols_below_1[2].button('**3.백내장 수술 후 시력, 일상생활**', on_click=set_form_step, args=['Jump', 3], type=step3_type, disabled=able_step_3, use_container_width=True)
+    # step_cols_below_1[2].markdown(
+    #     """
+    #     <p style='text-align: center; margin-top: -10px;'>
+    #         백내장 수술 후 시력, 일상생활
+    #     </p>
+    #     """, unsafe_allow_html=True)
     able_step_4 = True if st.session_state['progress'] < 4 else False
     # step_cols[4].button('정보 4', on_click=set_form_step, args=['Jump', 4], type=step4_type, disabled=able_step_4)
-    step_cols_below_2[0].button('**정보 4**', on_click=set_form_step, args=['Jump', 4], type=step4_type, disabled=able_step_4, use_container_width=True)
-    step_cols_below_2[0].markdown(
-        """
-        <p style='text-align: center; margin-top: -10px;'>
-            백내장 수술의 합병증과 부작용
-        </p>
-        """, unsafe_allow_html=True)
+    step_cols_below_2[0].button('**4.백내장 수술의 합병증과 부작용**', on_click=set_form_step, args=['Jump', 4], type=step4_type, disabled=able_step_4, use_container_width=True)
+    # step_cols_below_2[0].markdown(
+    #     """
+    #     <p style='text-align: center; margin-top: -10px;'>
+    #         백내장 수술의 합병증과 부작용
+    #     </p>
+    #     """, unsafe_allow_html=True)
     able_step_5 = True if st.session_state['progress'] < 5 else False
     # step_cols[5].button('정보 5', on_click=set_form_step, args=['Jump', 5], type=step5_type, disabled=able_step_5)
-    step_cols_below_2[1].button('**정보 5**', on_click=set_form_step, args=['Jump', 5], type=step5_type, disabled=able_step_5, use_container_width=True)
-    step_cols_below_2[1].markdown(
-        """
-        <p style='text-align: center; margin-top: -10px;'>
-            빈번한 질문 리스트
-        </p>
-        """, unsafe_allow_html=True)
+    step_cols_below_2[1].button('**5.빈번한 질문 리스트**', on_click=set_form_step, args=['Jump', 5], type=step5_type, disabled=able_step_5, use_container_width=True)
+    # step_cols_below_2[1].markdown(
+    #     """
+    #     <p style='text-align: center; margin-top: -10px;'>
+    #         빈번한 질문 리스트
+    #     </p>
+    #     """, unsafe_allow_html=True)
     able_step_6 = True if st.session_state['progress'] < 6 else False      
     # step_cols[6].button('환자별 정보', on_click=set_form_step, args=['Jump', 6], type=step6_type, disabled=able_step_6)      
-    step_cols_below_2[2].button('**정보6**', on_click=set_form_step, args=['Jump', 6], type=step6_type, disabled=able_step_6, use_container_width=True)
-    step_cols_below_2[2].markdown(
-        """
-        <p style='text-align: center; margin-top: -10px;'>
-            수술 후 주의사항
-        </p>
-        """, unsafe_allow_html=True)
+    step_cols_below_2[2].button('**6.수술 후 주의사항**', on_click=set_form_step, args=['Jump', 6], type=step6_type, disabled=able_step_6, use_container_width=True)
+    # step_cols_below_2[2].markdown(
+    #     """
+    #     <p style='text-align: center; margin-top: -10px;'>
+    #         수술 후 주의사항
+    #     </p>
+    #     """, unsafe_allow_html=True)
 
     st.markdown('---')
     personalized = False
@@ -628,11 +628,12 @@ def page_info():
             #### Q. 수술 후 주의해야 할 것에는 무엇이 있나요?
             - 수술 이후에는 다음과 같은 사항을 꼭 지켜주셔야 합니다.
 
-            1) **눈 비비지 말 것**
-            2) **일주일 간 세수, 샤워하지 말 것**
-            3) **안약 잘 넣을 것**
-            4) **외상 조심할 것**
-            5) **감염징후(통증, 시력저하, 심한 충혈)가 나타나면 바로 내원할 것**
+            1) **눈은 절대로 비비지 않습니다.**
+            2) **일주일 간 세수, 샤워를 삼가야 합니다.**
+            3) **한달 간 수영장, 목욕탕, 사우나 출입을 삼가야 합니다.**
+            4) **용법에 맞게 안약을 반드시 점안하며, 점안 전 후로 손을 깨끗하게 닦아야 합니다.**
+            5) **수술받은 눈이 눌리거나 부딪히지 않도록 주의해야 합니다.**
+            6) **심한 통증이나 충혈, 급격한 시력 저하 등 감염징후가 나타나면 외래나 응급실로 바로 내원하셔야 합니다.**
             """)
 
             st.write("---")

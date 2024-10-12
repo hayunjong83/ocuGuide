@@ -101,10 +101,17 @@ def page_input():
         explain = explain.replace("#","")
         st.markdown('---')
 
-        # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
-        if st.button("환자 정보 재등록"):
-            reset_info()
-
+        down1, down2, down3 = st.columns([1, 1, 1.5])
+        with down1 :
+            # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
+            if st.button("환자 정보 재등록", use_container_width=True):
+                reset_info()
+        
+        with down3:
+            if st.button("백내장 수술 정보로 이동", type='primary', use_container_width=True):
+                st.session_state["page"] = "ℹ️ 백내장수술정보"
+                st.rerun()
+            
     # 새로운 환자 정보를 등록한다.
     else:
         input_patient_info()
