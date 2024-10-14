@@ -97,6 +97,7 @@ def page_input():
             explain = st.session_state["patient_info"]["explain"]
         
         st.success(' 환자정보가 등록되었습니다. 이제 :red[**백내장 수술정보**]로 이동하실 수 있습니다.', icon="✅")
+        st.session_state["listen"] = dict()
     
         explain = explain.replace("#","")
         st.markdown('---')

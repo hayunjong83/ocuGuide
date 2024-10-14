@@ -133,7 +133,7 @@ def page_info():
     if 'patient_info' in st.session_state:
         if st.session_state['patient_info'] != None:
             personalized = True
-
+    
     # 단계 0) 정보 안내
     if st.session_state['current_step'] == 0:
         with st.container():
@@ -175,8 +175,12 @@ def page_info():
 
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
-    # elif active_tab == step1:   
-        if st.session_state["speech_mode"] == True:
+    # elif active_tab == step1:
+        if "step1" not in st.session_state["listen"].keys():
+            st.session_state["listen"]["step1"] = False
+
+        if st.session_state["speech_mode"] == True and st.session_state["listen"]["step1"] == False:
+            st.session_state["listen"]["step1"] = True
             up1, _ = st.columns([1,3])
             with up1:
                 stop_audio_btn = st.button("음성 모드 중지", key="up1", use_container_width=True)
@@ -198,7 +202,7 @@ def page_info():
             ]
             script3 = [
                 {"text": "#### Q. 백내장 수술시간은 어느정도 되나요?  \n\n", "time": 0},
-                {"text": "- 평균적으로 **약 20~30분** 정도 소요되나, 수술의 **난도가 높거나 수술 중 합병증이 발생하면 더 길어질 수 있습니다.\n", "time": 3},
+                {"text": "- 평균적으로 **약 20~30분** 정도 소요되나, 수술의 **난도가 높거나 수술 중 합병증이 발생하면 더 길어질 수 있습니다.**\n", "time": 3},
                 {"text": "\n", "time": 14}
             ]
             script4 = [
@@ -306,7 +310,7 @@ def page_info():
 
         - 일반적으로 안약을 통한 점안 마취 및 국소마취로 진행됩니다.
         - **예외적으로 협조가 어려운 환자의 경우에는 전신마취로 진행**해야 할 수 있습니다.
-        - 수술 중에는 최대한 움직이지 않아야 합니다. 눈을 가만히 있기 어렵거나, 30분 정도 누워있기어려운 경우, **폐쇄공포증**이 있는 경우에는 주치의에게 꼭 말씀해주시길 바랍니다. 
+        - 수술 중에는 최대한 움직이지 않아야 합니다. 눈을 가만히 있기 어렵거나, 30분 정도 누워있기 어려운 경우, **폐쇄공포증**이 있는 경우에는 주치의에게 꼭 말씀해주시길 바랍니다. 
         """)
             col1_4_l, col1_4_c, col1_4_r = st.columns([1, 2, 1])
             with col1_4_l:
@@ -330,6 +334,8 @@ def page_info():
                 """,
                 unsafe_allow_html=True)
             
+        down1, down2, down3 = st.columns([1, 1, 1.2])
+        with down1 :
             disable_step_1_again = True if st.session_state['progress'] > 1 else False
             unlock_step_2 = st.button("확인하였습니다.", key="to_step_2", disabled=disable_step_1_again)
             if unlock_step_2:
@@ -337,6 +343,12 @@ def page_info():
                 # st.session_state["active_tab"] = "단계 2"
                 st.session_state['current_step'] = 2
                 st.session_state['progress'] += 1
+                st.rerun()
+
+        with down3:
+            if st.button("전체 다시 듣기", use_container_width=True):
+                st.session_state["speech_mode"] = True
+                st.session_state["listen"]["step1"] = False
                 st.rerun()
 
     # 단계 2) 백내장 수술에서 렌즈의 종류 및 도수
