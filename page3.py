@@ -183,7 +183,7 @@ def page_info():
             st.session_state["listen"]["step1"] = True
             up1, _ = st.columns([1,3])
             with up1:
-                stop_audio_btn = st.button("음성 모드 중지", key="up1", use_container_width=True)
+                stop_audio_btn1 = st.button("음성 모드 중지", key="up1", use_container_width=True)
             
             audio_files = ['./ref/contents/q1_1.mp3', './ref/contents/q1_2.mp3', './ref/contents/q1_3.mp3', './ref/contents/q1_4.mp3']
             script1 = [
@@ -220,7 +220,7 @@ def page_info():
 
             for audio_file, script in zip(audio_files, scripts):
                 autoplay_audio(audio_file)
-                if stop_audio_btn:
+                if stop_audio_btn1:
                     st.session_state["speech_mode"] = False
                     st.rerun()
                     stop_audio()
@@ -230,12 +230,12 @@ def page_info():
                         time.sleep(0.1)
                     
                     for data in stream_partial_data([item]):
-                        if stop_audio_btn:
+                        if stop_audio_btn1:
                             stop_audio()
                             break
                         stream_text_container.markdown(data, unsafe_allow_html=True)
                     
-                    if stop_audio_btn:
+                    if stop_audio_btn1:
                         stop_audio()
                         break
                     time.sleep(0.5)
@@ -243,7 +243,7 @@ def page_info():
                     full_text += item["text"]
                     full_text_container.markdown(full_text, unsafe_allow_html=True)
 
-                if stop_audio_btn:
+                if stop_audio_btn1:
                         stop_audio()
                         break
             stream_text_container.empty()
@@ -353,6 +353,76 @@ def page_info():
 
     # 단계 2) 백내장 수술에서 렌즈의 종류 및 도수
     elif st.session_state['current_step'] == 2:
+        if "step2" not in st.session_state["listen"].keys():
+            st.session_state["listen"]["step2"] = False
+
+        if st.session_state["speech_mode"] == True and st.session_state["listen"]["step2"] == False:
+            st.session_state["listen"]["step2"] = True
+            up2, _ = st.columns([1,3])
+            with up2:
+                stop_audio_btn2 = st.button("음성 모드 중지", key="up2", use_container_width=True)
+            
+            audio_files = ['./ref/contents/q2_1.mp3']
+            script1 = [
+                {"text": "#### Q. 백내장 수술시 눈의 도수는 어떻게 되나요?  \n\n", "time": 0},
+                {"text": "- 자연적인 수정체는 거리에 따라 자동으로 초점을 맞추어 주는 조절력이 있습니다.\n", "time": 4},
+                {"text": "백내장 수술 시 삽입되는 인공수정체는 자연적인 수정체와는 달리 이러한 조절력이 없습니다.\n", "time": 11},
+                {"text": "- **따라서, 백내장 수술을 하게 되면 원거리나 근거리 중 한 곳에만 초점을 맺게 됩니다.**\n", "time": 17},
+                {"text": "**일반적으로, 원거리가 잘 보이도록 인공수정체를 삽입하게 되며,", "time": 24},
+                {"text": "이 경우 근거리를 볼 때는 안경 착용이 필요합니다.**\n", "time": 29},
+                {"text": "    + (근거리 작업이 많은 경우 근거리가 잘 보이도록 하는 것도 가능합니다.)\n", "time": 33},
+                {"text": "- 최근에는 이러한 단점을 보완한 새로운 인공수정체들이 사용되고 있으며, 종류는 다음과 같습니다.\n", "time": 38},
+                {"text": "1) **다초점 인공수정체 (Multifocal)**\n", "time": 46},
+                {"text": "+ 원거리와 근거리(30cm) 모두 잘 보이도록 고안된 인공수정체로 ", "time": 49},
+                {"text": "주로 노안 교정시에 많이 사용되나 빛번짐 등의 부작용이 있을 수 있습니다.\n", "time": 55},
+                {"text": "+ 녹내장이나 황반변성 등 시신경이나 망막 이상이 있는 환자에는 권장되지 않습니다.\n", "time": 61},
+                {"text": "2) **강화 단초점 인공수정체**\n", "time": 68},
+                {"text": "+ 단초점 인공수정체보다 중간거리(50cm)가 잘 보이도록 만들어진 인공수정체입니다. \n", "time": 72},
+                {"text": "+ 다초점 인공수정체보다 부작용이 적으나, 근거리에서 안경 착용이 필요할 수 있습니다.\n", "time": 80},
+                {"text": "3) **난시교정렌즈 (Toric)**\n", "time": 87},
+                {"text": "+ 난시가 심한 경우 난시교정렌즈를 고려할 수 있습니다.\n\n", "time": 89},
+                {"text": "- **수술 후에는 인공수정체의 교체가 어렵기 때문에**, \n", "time": 94},
+                {"text": " 개개인의 연령 및 눈 상태에 따라 알맞은 인공수정체를 결정하는 것이 중요합니다.  \n", "time": 98},
+                {"text": "**인공수정체 결정은 주치의선생님의 설명을 충분히 들은후에 결정하시기 바랍니다.**", "time": 105},
+                {"text": "\n", "time": 110}
+            ]
+
+            scripts = [script1]
+            full_text_container = st.empty()
+            full_text = ""
+            stream_text_container = st.empty()
+            for audio_file, script in zip(audio_files, scripts):
+                autoplay_audio(audio_file)
+                if stop_audio_btn2:
+                    st.session_state["speech_mode"] = False
+                    st.rerun()
+                    stop_audio()
+                start_time = time.time()
+                for item in script:
+                    while time.time() - start_time < item["time"]:
+                        time.sleep(0.1)
+                    
+                    for data in stream_partial_data([item]):
+                        if stop_audio_btn2:
+                            stop_audio()
+                            break
+                        stream_text_container.markdown(data, unsafe_allow_html=True)
+                    
+                    if stop_audio_btn2:
+                        stop_audio()
+                        break
+                    time.sleep(0.5)
+                    stream_text_container.empty()
+                    full_text += item["text"]
+                    full_text_container.markdown(full_text, unsafe_allow_html=True)
+
+                if stop_audio_btn2:
+                        stop_audio()
+                        break
+            stream_text_container.empty()
+            full_text_container.empty()
+
+
         with st.container():
         
             st.subheader("단계 2) 인공수정체 결정")
@@ -391,14 +461,24 @@ def page_info():
                 if st.button("듣기 중단", key='q2_1_stop', use_container_width=True):
                     stop_audio()
 
-            disable_step_2_again = True if st.session_state['progress'] > 2 else False
-            unlock_step_3 = st.button("확인하였습니다.", key="to_step_3", disabled=disable_step_2_again)
-            if unlock_step_3:
-                # st.session_state["step_3"] = True
-                # st.session_state["active_tab"] = "단계 3"
-                st.session_state['current_step'] = 3
-                st.session_state['progress'] += 1
-                st.rerun()
+            st.markdown('---')
+            down1, down2, down3 = st.columns([1, 1, 1.2])
+            with down1 :
+                disable_step_2_again = True if st.session_state['progress'] > 2 else False
+                unlock_step_3 = st.button("확인하였습니다.", key="to_step_3", disabled=disable_step_2_again)
+                if unlock_step_3:
+                    # st.session_state["step_3"] = True
+                    # st.session_state["active_tab"] = "단계 3"
+                    st.session_state['current_step'] = 3
+                    st.session_state['progress'] += 1
+                    st.rerun()
+
+            with down3:
+                if st.button("전체 다시 듣기", use_container_width=True):
+                    st.session_state["speech_mode"] = True
+                    st.session_state["listen"]["step2"] = False
+                    st.rerun()
+
 
     # 단계 3) 백내장 수술 후 시력, 일상생활
     elif st.session_state['current_step'] == 3:
