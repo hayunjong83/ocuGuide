@@ -14,7 +14,7 @@ def stream_data(script):
 
 # @traceable
 def page_w_chatgpt():
-    st.title("❔ Q&A 챗봇 [챗GPT]")
+    st.title("❔ Q&A 챗봇")
 
     with st.container(border=True):
         c1, c2 = st.columns([7, 1])
