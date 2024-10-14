@@ -74,60 +74,23 @@ def page_info():
     
     step_cols[0].button('개요', on_click=set_form_step, args=['Jump', 0], type=step0_type, use_container_width=True)
     able_step_1 = True if st.session_state['progress'] < 1 else False
-    # step_cols[1].button('정보 1', on_click=set_form_step, args=['Jump', 1], type=step1_type, disabled=able_step_1)
     step_cols_below_1[0].button('**1.백내장의 정의, 수술 과정**', on_click=set_form_step, args=['Jump', 1], type=step1_type, disabled=able_step_1, use_container_width=True)
-    # step_cols_below_1[0].markdown(
-    #     """
-    #     <p style='text-align: center; margin-top: -10px;'>
-    #         백내장의 정의, 수술 과정
-    #     </p>
-    #     """, unsafe_allow_html=True)
-    able_step_2 = True if st.session_state['progress'] < 2 else False
-    # step_cols[2].button('정보 2', on_click=set_form_step, args=['Jump', 2], type=step2_type, disabled=able_step_2)
-    step_cols_below_1[1].button('**2.인공수정체 결정**', on_click=set_form_step, args=['Jump', 2], type=step2_type, disabled=able_step_2, use_container_width=True)
-    # step_cols_below_1[1].markdown(
-    #     """
-    #     <p style='text-align: center; margin-top: -10px;'>
-    #         인공수정체 결정
-    #     </p>
-    #     """, unsafe_allow_html=True)
-    able_step_3 = True if st.session_state['progress'] < 3 else False
-    # step_cols[3].button('정보 3', on_click=set_form_step, args=['Jump', 3], type=step3_type, disabled=able_step_3)
-    step_cols_below_1[2].button('**3.백내장 수술 후 시력, 일상생활**', on_click=set_form_step, args=['Jump', 3], type=step3_type, disabled=able_step_3, use_container_width=True)
-    # step_cols_below_1[2].markdown(
-    #     """
-    #     <p style='text-align: center; margin-top: -10px;'>
-    #         백내장 수술 후 시력, 일상생활
-    #     </p>
-    #     """, unsafe_allow_html=True)
-    able_step_4 = True if st.session_state['progress'] < 4 else False
-    # step_cols[4].button('정보 4', on_click=set_form_step, args=['Jump', 4], type=step4_type, disabled=able_step_4)
-    step_cols_below_2[0].button('**4.백내장 수술의 합병증과 부작용**', on_click=set_form_step, args=['Jump', 4], type=step4_type, disabled=able_step_4, use_container_width=True)
-    # step_cols_below_2[0].markdown(
-    #     """
-    #     <p style='text-align: center; margin-top: -10px;'>
-    #         백내장 수술의 합병증과 부작용
-    #     </p>
-    #     """, unsafe_allow_html=True)
-    able_step_5 = True if st.session_state['progress'] < 5 else False
-    # step_cols[5].button('정보 5', on_click=set_form_step, args=['Jump', 5], type=step5_type, disabled=able_step_5)
-    step_cols_below_2[1].button('**5.빈번한 질문 리스트**', on_click=set_form_step, args=['Jump', 5], type=step5_type, disabled=able_step_5, use_container_width=True)
-    # step_cols_below_2[1].markdown(
-    #     """
-    #     <p style='text-align: center; margin-top: -10px;'>
-    #         빈번한 질문 리스트
-    #     </p>
-    #     """, unsafe_allow_html=True)
-    able_step_6 = True if st.session_state['progress'] < 6 else False      
-    # step_cols[6].button('환자별 정보', on_click=set_form_step, args=['Jump', 6], type=step6_type, disabled=able_step_6)      
-    step_cols_below_2[2].button('**6.수술 후 주의사항**', on_click=set_form_step, args=['Jump', 6], type=step6_type, disabled=able_step_6, use_container_width=True)
-    # step_cols_below_2[2].markdown(
-    #     """
-    #     <p style='text-align: center; margin-top: -10px;'>
-    #         수술 후 주의사항
-    #     </p>
-    #     """, unsafe_allow_html=True)
 
+    able_step_2 = True if st.session_state['progress'] < 2 else False
+    step_cols_below_1[1].button('**2.인공수정체 결정**', on_click=set_form_step, args=['Jump', 2], type=step2_type, disabled=able_step_2, use_container_width=True)
+    
+    able_step_3 = True if st.session_state['progress'] < 3 else False
+    step_cols_below_1[2].button('**3.백내장 수술 후 시력, 일상생활**', on_click=set_form_step, args=['Jump', 3], type=step3_type, disabled=able_step_3, use_container_width=True)
+    
+    able_step_4 = True if st.session_state['progress'] < 4 else False
+    step_cols_below_2[0].button('**4.백내장 수술의 합병증과 부작용**', on_click=set_form_step, args=['Jump', 4], type=step4_type, disabled=able_step_4, use_container_width=True)
+    
+    able_step_5 = True if st.session_state['progress'] < 5 else False
+    step_cols_below_2[1].button('**5.빈번한 질문 리스트**', on_click=set_form_step, args=['Jump', 5], type=step5_type, disabled=able_step_5, use_container_width=True)
+    
+    able_step_6 = True if st.session_state['progress'] < 6 else False      
+    step_cols_below_2[2].button('**6.수술 후 주의사항**', on_click=set_form_step, args=['Jump', 6], type=step6_type, disabled=able_step_6, use_container_width=True)
+    
     st.markdown('---')
     personalized = False
     if 'patient_info' in st.session_state:
@@ -175,7 +138,6 @@ def page_info():
 
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
-    # elif active_tab == step1:
         if "step1" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step1"] = False
 
@@ -250,7 +212,6 @@ def page_info():
             full_text_container.empty()
 
         with st.container():
-
             st.subheader("정보 1) 백내장의 정의, 수술 과정")
 
             # 내용 1-1
@@ -286,7 +247,6 @@ def page_info():
             with col1_2_r:
                 if st.button("듣기 중단", key='q1_2_stop', use_container_width=True):
                     stop_audio()
-
 
             # 내용 1-3
             st.markdown(
@@ -339,8 +299,6 @@ def page_info():
             disable_step_1_again = True if st.session_state['progress'] > 1 else False
             unlock_step_2 = st.button("확인하였습니다.",  type='primary', key="to_step_2", disabled=disable_step_1_again)
             if unlock_step_2:
-                # st.session_state["step_2"] = True
-                # st.session_state["active_tab"] = "단계 2"
                 st.session_state['current_step'] = 2
                 st.session_state['progress'] += 1
                 st.rerun()
@@ -422,9 +380,7 @@ def page_info():
             stream_text_container.empty()
             full_text_container.empty()
 
-
-        with st.container():
-        
+        with st.container():        
             st.subheader("단계 2) 인공수정체 결정")
 
             # 내용 2-1
@@ -467,8 +423,6 @@ def page_info():
                 disable_step_2_again = True if st.session_state['progress'] > 2 else False
                 unlock_step_3 = st.button("확인하였습니다.", type='primary', key="to_step_3", disabled=disable_step_2_again)
                 if unlock_step_3:
-                    # st.session_state["step_3"] = True
-                    # st.session_state["active_tab"] = "단계 3"
                     st.session_state['current_step'] = 3
                     st.session_state['progress'] += 1
                     st.rerun()
@@ -478,7 +432,6 @@ def page_info():
                     st.session_state["speech_mode"] = True
                     st.session_state["listen"]["step2"] = False
                     st.rerun()
-
 
     # 단계 3) 백내장 수술 후 시력, 일상생활
     elif st.session_state['current_step'] == 3:
@@ -551,8 +504,8 @@ def page_info():
                     full_text_container.markdown(full_text, unsafe_allow_html=True)
 
                 if stop_audio_btn3:
-                        stop_audio()
-                        break
+                    stop_audio()
+                    break
             stream_text_container.empty()
             full_text_container.empty()
         
@@ -635,8 +588,6 @@ def page_info():
                 disable_step_3_again = True if st.session_state['progress'] > 3 else False
                 unlock_step_4 = st.button("확인하였습니다.", type='primary', key="to_step_4", disabled=disable_step_3_again)
                 if unlock_step_4:
-                    # st.session_state["step_4"] = True
-                    # st.session_state["active_tab"] = "단계 4"
                     st.session_state['current_step'] = 4
                     st.session_state['progress'] += 1
                     st.rerun()
@@ -646,8 +597,6 @@ def page_info():
                     st.session_state["speech_mode"] = True
                     st.session_state["listen"]["step3"] = False
                     st.rerun()
-
-
 
     # 단계 4) 백내장 수술의 부작용 및 합병증
     elif st.session_state['current_step'] == 4:
@@ -727,8 +676,8 @@ def page_info():
                     full_text_container.markdown(full_text, unsafe_allow_html=True)
 
                 if stop_audio_btn4:
-                        stop_audio()
-                        break
+                    stop_audio()
+                    break
             stream_text_container.empty()
             full_text_container.empty()
 
@@ -790,8 +739,6 @@ def page_info():
                 disable_step_4_again = True if st.session_state['progress'] > 4 else False
                 unlock_step_5 = st.button("확인하였습니다.", type='primary', key="to_step_5", disabled=disable_step_4_again)
                 if unlock_step_5:
-                    # st.session_state["step_5"] = True
-                    # st.session_state["active_tab"] = "단계 5"
                     st.session_state['current_step'] = 5
                     st.session_state['progress'] += 1
                     st.rerun()
@@ -802,8 +749,6 @@ def page_info():
                     st.session_state["listen"]["step4"] = False
                     st.rerun()
 
-
-    ## 단계 5와 단계 6은 동시 활성화하고 순서 바꾸기
     # 단계 5) 자주 묻는 질문
     elif st.session_state['current_step'] == 5:
         if "step5" not in st.session_state["listen"].keys():
@@ -878,8 +823,8 @@ def page_info():
                     full_text_container.markdown(full_text, unsafe_allow_html=True)
 
                 if stop_audio_btn5:
-                        stop_audio()
-                        break
+                    stop_audio()
+                    break
             stream_text_container.empty()
             full_text_container.empty()
 
@@ -960,8 +905,6 @@ def page_info():
                 disable_step_5_again = True if st.session_state['progress'] > 5 else False
                 unlock_step_6 = st.button("확인하였습니다.",type='primary', key="to_step_6", disabled=disable_step_5_again)
                 if unlock_step_6:
-                    # st.session_state["step_6"] = True
-                    # st.session_state["active_tab"] = ":red[환자별 정보]"
                     st.session_state['current_step'] = 6
                     st.session_state['progress'] += 1
                     st.rerun()
@@ -972,7 +915,6 @@ def page_info():
                     st.session_state["listen"]["step5"] = False
                     st.rerun()
                     
-            
     elif st.session_state['current_step'] == 6:
         if "step6" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step6"] = False
@@ -1033,7 +975,6 @@ def page_info():
 
         if not personalized:
             st.error("회원정보를 먼저 등록해주십시오.")
-            # st.session_state["active_tab"] = step0
 
         else:
             st.markdown(
