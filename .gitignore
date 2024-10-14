@@ -2,6 +2,7 @@
 .streamlit/
 __pycache__/
 .devcontainer/
+.vscode/
 
 # temporaray login related
 sign_up.py
