@@ -106,7 +106,8 @@ def page_input():
         with down1 :
             # 또다른 환자 정보를 등록할 때, 기존 정보를 리셋한다.
             if st.button("환자 정보 재등록", use_container_width=True):
-                reset_info()
+                # reset_info()
+                ask()
         
         with down3:
             if st.button("백내장 수술 정보로 이동", type='primary', use_container_width=True):
@@ -116,6 +117,18 @@ def page_input():
     # 새로운 환자 정보를 등록한다.
     else:
         input_patient_info()
+
+@st.dialog("환자 정보를 재등록하시겠습니까?")
+def ask():
+    st.write("환자 정보를 정말 재등록 하시겠습니까?")
+    c1, c2, c3 = st.columns([1, 1, 1])
+    with c1:
+        if st.button("확인",type='primary', use_container_width=True):
+            reset_info()
+    with c3:
+        if st.button("취소", use_container_width=True):
+            st.rerun()
+
 
 # 새로운 환자 정보 입력을 위한 리셋    
 def reset_info():
