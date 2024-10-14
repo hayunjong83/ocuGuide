@@ -244,8 +244,8 @@ def page_info():
                     full_text_container.markdown(full_text, unsafe_allow_html=True)
 
                 if stop_audio_btn1:
-                        stop_audio()
-                        break
+                    stop_audio()
+                    break
             stream_text_container.empty()
             full_text_container.empty()
 
@@ -365,9 +365,9 @@ def page_info():
             audio_files = ['./ref/contents/q2_1.mp3']
             script1 = [
                 {"text": "#### Q. 백내장 수술시 눈의 도수는 어떻게 되나요?  \n\n", "time": 0},
-                {"text": "- 자연적인 수정체는 거리에 따라 자동으로 초점을 맞추어 주는 조절력이 있습니다.\n", "time": 4},
+                {"text": "- 자연적인 수정체는 거리에 따라 자동으로 초점을 맞추어 주는 조절력이 있습니다.  \n", "time": 4},
                 {"text": "백내장 수술 시 삽입되는 인공수정체는 자연적인 수정체와는 달리 이러한 조절력이 없습니다.\n", "time": 11},
-                {"text": "- **따라서, 백내장 수술을 하게 되면 원거리나 근거리 중 한 곳에만 초점을 맺게 됩니다.**\n", "time": 17},
+                {"text": "- **따라서, 백내장 수술을 하게 되면 원거리나 근거리 중 한 곳에만 초점을 맺게 됩니다.**  \n", "time": 17},
                 {"text": "**일반적으로, 원거리가 잘 보이도록 인공수정체를 삽입하게 되며,", "time": 24},
                 {"text": "이 경우 근거리를 볼 때는 안경 착용이 필요합니다.**\n", "time": 29},
                 {"text": "    + (근거리 작업이 많은 경우 근거리가 잘 보이도록 하는 것도 가능합니다.)\n", "time": 33},
@@ -417,8 +417,8 @@ def page_info():
                     full_text_container.markdown(full_text, unsafe_allow_html=True)
 
                 if stop_audio_btn2:
-                        stop_audio()
-                        break
+                    stop_audio()
+                    break
             stream_text_container.empty()
             full_text_container.empty()
 
@@ -803,10 +803,86 @@ def page_info():
                     st.rerun()
 
 
-        
     ## 단계 5와 단계 6은 동시 활성화하고 순서 바꾸기
     # 단계 5) 자주 묻는 질문
     elif st.session_state['current_step'] == 5:
+        if "step5" not in st.session_state["listen"].keys():
+            st.session_state["listen"]["step5"] = False
+        
+        if st.session_state["speech_mode"] == True and st.session_state["listen"]["step5"] == False:
+            st.session_state["listen"]["step5"] = True
+            up, _ = st.columns([1,3])
+            with up:
+                stop_audio_btn5 = st.button("음성 모드 중지", key="up5", use_container_width=True)
+
+            audio_files = ['./ref/contents/q5_1.mp3', './ref/contents/q5_2.mp3', './ref/contents/q5_3.mp3', './ref/contents/q5_4.mp3']
+            script1 = [
+                {"text": "#### Q. 양쪽 눈을 동시에 수술이 가능한가요?  \n\n", "time": 0},
+                {"text": "- 양쪽 눈이 모두 백내장 수술이 필요한 경우, 수술 중이나 후에 발생할 수 있는 합병증의 영향을 최소화하고,", "time": 4},
+                {"text": " 일상생활을 최대한 유지할 수 있도록 한쪽 눈씩 수술을 진행하게 됩니다.\n", "time": 10},
+                {"text": "- 그러나 전신마취가 필요한 경우, 건강 상태가 좋지 않아 여러 번의 수술이 어려운 경우 등에는 양쪽 눈을 동시에 수술하기도 합니다.\n", "time": 17},
+                {"text": "\n", "time": 26}
+            ]
+            script2 = [
+                {"text": "#### Q. 백내장 수술 시 며칠동안 입원해야 하나요?  \n\n", "time": 0},
+                {"text": "- 백내장 수술은 당일 수술 후 당일 귀가하는 일일입원으로 진행됩니다. \n", "time": 4},
+                {"text": "- 수술 중 합병증이 발생하거나 전신마취로 수술이 진행되는 경우에는 필요에 따라 추가적인 입원 치료가 필요할 수 있습니다.\n", "time": 10},
+                {"text": "\n", "time": 18}
+            ]
+            script3 = [
+                {"text": "#### Q. 수술 당일에는 언제 와야 하고, 어떻게 준비해야 하나요?  \n\n", "time": 0},
+                {"text": "- 수술 당일 내원시간은 수술 전날 전화 및 문자메세지로 안내해드립니다.  \n", "time": 5},
+                {"text": " 수술 전날 전화를 놓치지 않도록 유의하여 주시기 바랍니다. \n", "time": 11},
+                {"text": "- 수술 당일에도 식사는 가능합니다.  \n", "time": 16},
+                {"text": " 수술에 무리가 되지 않도록 소화가 잘 되는 음식으로 가볍게 식사하시기 바랍니다. \n", "time": 19},
+                {"text": "- 일반적으로 **수술 1-2시간 전에 도착**하여 산동제를 점안하기 시작하며, ", "time": 25},
+                {"text": " 충분히 산동 된 것을 확인한 후 수술을 진행하게 됩니다. \n", "time": 30},
+                {"text": "- 수술 후에는 충분히 휴식 후, 담당 간호사에게 주의사항 및 퇴원약 안내를 받고 퇴원하게 됩니다.\n", "time": 36},
+                {"text": "\n", "time": 44}
+            ]
+            script4 = [
+                {"text": "#### Q. 백내장 수술 전에 복용하지 말아야 할 약제가 있을까요?  \n\n", "time": 0},
+                {"text": "- 혈압약, 당뇨약, 항응고제 등 대부분의 약제는 수술 당일에도 복용 가능합니다.\n", "time": 4},
+                {"text": "- 다만, 일부 환자의 경우에는 백내장 수술에 영향을 미치는 약제가 있을 수 있으므로, ", "time": 11},
+                {"text": " 수술 전 주치의나 수술 코디네이터에게 꼭 알려주시기 바랍니다.\n", "time": 17},
+                {"text": "\n", "time": 22}
+            ]
+            scripts = [script1, script2, script3, script4]
+
+            full_text_container = st.empty()
+            full_text = ""
+            stream_text_container = st.empty()
+            for audio_file, script in zip(audio_files, scripts):
+                autoplay_audio(audio_file)
+                if stop_audio_btn5:
+                    st.session_state["speech_mode"] = False
+                    st.rerun()
+                    stop_audio()
+                start_time = time.time()
+                for item in script:
+                    while time.time() - start_time < item["time"]:
+                        time.sleep(0.1)
+                    
+                    for data in stream_partial_data([item]):
+                        if stop_audio_btn5:
+                            stop_audio()
+                            break
+                        stream_text_container.markdown(data, unsafe_allow_html=True)
+                    
+                    if stop_audio_btn5:
+                        stop_audio()
+                        break
+                    time.sleep(0.5)
+                    stream_text_container.empty()
+                    full_text += item["text"]
+                    full_text_container.markdown(full_text, unsafe_allow_html=True)
+
+                if stop_audio_btn5:
+                        stop_audio()
+                        break
+            stream_text_container.empty()
+            full_text_container.empty()
+
         with st.container():
             st.subheader("단계 5) 빈번한 질문 리스트")
 
@@ -878,16 +954,83 @@ def page_info():
                 if st.button("듣기 중단", key='q5_4_stop', use_container_width=True):
                     stop_audio()
             
-            disable_step_5_again = True if st.session_state['progress'] > 5 else False
-            unlock_step_6 = st.button("확인하였습니다.", key="to_step_6", disabled=disable_step_5_again)
-            if unlock_step_6:
-                # st.session_state["step_6"] = True
-                # st.session_state["active_tab"] = ":red[환자별 정보]"
-                st.session_state['current_step'] = 6
-                st.session_state['progress'] += 1
-                st.rerun()
+            st.markdown('---')
+            down1, down2, down3 = st.columns([1, 1, 1.2])
+            with down1 :
+                disable_step_5_again = True if st.session_state['progress'] > 5 else False
+                unlock_step_6 = st.button("확인하였습니다.",type='primary', key="to_step_6", disabled=disable_step_5_again)
+                if unlock_step_6:
+                    # st.session_state["step_6"] = True
+                    # st.session_state["active_tab"] = ":red[환자별 정보]"
+                    st.session_state['current_step'] = 6
+                    st.session_state['progress'] += 1
+                    st.rerun()
+
+            with down3:
+                if st.button("전체 다시 듣기", use_container_width=True):
+                    st.session_state["speech_mode"] = True
+                    st.session_state["listen"]["step5"] = False
+                    st.rerun()
+                    
             
     elif st.session_state['current_step'] == 6:
+        if "step6" not in st.session_state["listen"].keys():
+            st.session_state["listen"]["step6"] = False
+        
+        if st.session_state["speech_mode"] == True and st.session_state["listen"]["step6"] == False:
+            st.session_state["listen"]["step6"] = True
+            up, _ = st.columns([1,3])
+            with up:
+                stop_audio_btn6 = st.button("음성 모드 중지", key="up6", use_container_width=True)
+            
+            audio_files = ['./ref/contents/q6_1.mp3']
+            script1 = [
+                {"text": "#### Q. 수술 후 주의해야 할 것에는 무엇이 있나요?  \n\n", "time": 0},
+                {"text": "- 수술 이후에는 다음과 같은 사항을 꼭 지켜주셔야 합니다.\n", "time": 4},
+                {"text": "1) **눈은 절대로 비비지 않습니다.**\n", "time": 9},
+                {"text": "2) **일주일 간 세수, 샤워를 삼가야 합니다.**\n", "time": 12},
+                {"text": "3) **한달 간 수영장, 목욕탕, 사우나 출입을 삼가야 합니다.**\n", "time": 17},
+                {"text": "4) **용법에 맞게 안약을 반드시 점안하며, 점안 전 후로 손을 깨끗하게 닦아야 합니다.**\n", "time": 23},
+                {"text": "5) **수술받은 눈이 눌리거나 부딪히지 않도록 주의해야 합니다.**\n", "time": 30},
+                {"text": "6) **심한 통증이나 충혈, 급격한 시력 저하 등 감염징후가 나타나면 외래나 응급실로 바로 내원하셔야 합니다.**\n", "time": 35},
+                {"text": "\n", "time": 44}
+            ]
+
+            scripts = [script1]
+            full_text_container = st.empty()
+            full_text = ""
+            stream_text_container = st.empty()
+            for audio_file, script in zip(audio_files, scripts):
+                autoplay_audio(audio_file)
+                if stop_audio_btn6:
+                    st.session_state["speech_mode"] = False
+                    st.rerun()
+                    stop_audio()
+                start_time = time.time()
+                for item in script:
+                    while time.time() - start_time < item["time"]:
+                        time.sleep(0.1)
+                    
+                    for data in stream_partial_data([item]):
+                        if stop_audio_btn6:
+                            stop_audio()
+                            break
+                        stream_text_container.markdown(data, unsafe_allow_html=True)
+                    
+                    if stop_audio_btn6:
+                        stop_audio()
+                        break
+                    time.sleep(0.5)
+                    stream_text_container.empty()
+                    full_text += item["text"]
+                    full_text_container.markdown(full_text, unsafe_allow_html=True)
+
+                if stop_audio_btn6:
+                    stop_audio()
+                    break
+            stream_text_container.empty()
+            full_text_container.empty()
+
         if not personalized:
             st.error("회원정보를 먼저 등록해주십시오.")
             # st.session_state["active_tab"] = step0
@@ -905,6 +1048,13 @@ def page_info():
             5) **수술받은 눈이 눌리거나 부딪히지 않도록 주의해야 합니다.**
             6) **심한 통증이나 충혈, 급격한 시력 저하 등 감염징후가 나타나면 외래나 응급실로 바로 내원하셔야 합니다.**
             """)
+            col6_1_l, col6_1_c, col6_1_r = st.columns([1, 2, 1])
+            with col6_1_l:
+                if st.button(f"▶️ 음성으로 듣기", key='q6_1', use_container_width=True):
+                    autoplay_audio('./ref/contents/q6_1.mp3')
+            with col6_1_r:
+                if st.button("듣기 중단", key='q6_1_stop', use_container_width=True):
+                    stop_audio()
 
             st.write("---")
             diag = st.session_state['patient_info']['diagnosis']
