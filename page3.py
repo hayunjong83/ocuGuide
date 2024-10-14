@@ -162,7 +162,7 @@ def page_info():
             - 언제든 주치의 선생님을 통하여, 더 상세하고 친절한 설명을 받으실 수 있습니다.
             """)
             disable_step_0_again = True if st.session_state['progress'] > 0 else False
-            unlock_step_1 = st.button("확인하였습니다.", key="to_step_1", disabled=disable_step_0_again)
+            unlock_step_1 = st.button("확인하였습니다.", type='primary', key="to_step_1", disabled=disable_step_0_again)
             if unlock_step_1:
                 if 'patient_info' not in st.session_state:
                     st.warning("환자 정보를 먼저 등록해주세요.")
@@ -181,8 +181,8 @@ def page_info():
 
         if st.session_state["speech_mode"] == True and st.session_state["listen"]["step1"] == False:
             st.session_state["listen"]["step1"] = True
-            up1, _ = st.columns([1,3])
-            with up1:
+            up, _ = st.columns([1,3])
+            with up:
                 stop_audio_btn1 = st.button("음성 모드 중지", key="up1", use_container_width=True)
             
             audio_files = ['./ref/contents/q1_1.mp3', './ref/contents/q1_2.mp3', './ref/contents/q1_3.mp3', './ref/contents/q1_4.mp3']
@@ -337,7 +337,7 @@ def page_info():
         down1, down2, down3 = st.columns([1, 1, 1.2])
         with down1 :
             disable_step_1_again = True if st.session_state['progress'] > 1 else False
-            unlock_step_2 = st.button("확인하였습니다.", key="to_step_2", disabled=disable_step_1_again)
+            unlock_step_2 = st.button("확인하였습니다.",  type='primary', key="to_step_2", disabled=disable_step_1_again)
             if unlock_step_2:
                 # st.session_state["step_2"] = True
                 # st.session_state["active_tab"] = "단계 2"
@@ -358,8 +358,8 @@ def page_info():
 
         if st.session_state["speech_mode"] == True and st.session_state["listen"]["step2"] == False:
             st.session_state["listen"]["step2"] = True
-            up2, _ = st.columns([1,3])
-            with up2:
+            up, _ = st.columns([1,3])
+            with up:
                 stop_audio_btn2 = st.button("음성 모드 중지", key="up2", use_container_width=True)
             
             audio_files = ['./ref/contents/q2_1.mp3']
@@ -465,7 +465,7 @@ def page_info():
             down1, down2, down3 = st.columns([1, 1, 1.2])
             with down1 :
                 disable_step_2_again = True if st.session_state['progress'] > 2 else False
-                unlock_step_3 = st.button("확인하였습니다.", key="to_step_3", disabled=disable_step_2_again)
+                unlock_step_3 = st.button("확인하였습니다.", type='primary', key="to_step_3", disabled=disable_step_2_again)
                 if unlock_step_3:
                     # st.session_state["step_3"] = True
                     # st.session_state["active_tab"] = "단계 3"
@@ -482,6 +482,80 @@ def page_info():
 
     # 단계 3) 백내장 수술 후 시력, 일상생활
     elif st.session_state['current_step'] == 3:
+        if "step3" not in st.session_state["listen"].keys():
+            st.session_state["listen"]["step3"] = False
+        
+        if st.session_state["speech_mode"] == True and st.session_state["listen"]["step3"] == False:
+            st.session_state["listen"]["step3"] = True
+            up, _ = st.columns([1,3])
+            with up:
+                stop_audio_btn3 = st.button("음성 모드 중지", key="up3", use_container_width=True)
+
+            audio_files = ['./ref/contents/q3_1.mp3', './ref/contents/q3_2.mp3', './ref/contents/q3_3.mp3', './ref/contents/q3_4.mp3']
+            script1 = [
+                {"text": "#### Q. 백내장 수술 후에는 언제부터 잘 보이게 되나요?  \n\n", "time": 0},
+                {"text": "- 수술 직후나 다음날부터 잘 보이는 경우도 있으나 각막 부종 등으로 오히려 일시적으로 시력이 떨어질 수도 있습니다.\n", "time": 4},
+                {"text": " 일반적으로 1~2주간의 회복기를 거치며 서서히 시력이 호전됩니다.\n", "time": 13},
+                {"text": "- 수술 후 1~2달 정도 뒤에 최종적으로 정확한 시력 및 도수를 알 수 있습니다.  \n", "time": 20},
+                {"text": "안경이 필요할 경우 이 시기에 처방을 받으시면 됩니다.\n", "time": 26},
+                {"text": "- 망막질환, 녹내장 등 기저 안질환이 동반되어 있는 경우에는 시력 회복이 제한될 수 있습니다.\n", "time": 31},
+                {"text": "\n", "time": 38}
+            ]
+            script2 = [
+                {"text": "#### Q. 백내장 수술 이후 일상생활은 언제부터 가능한가요?  \n\n", "time": 0},
+                {"text": "- 백내장 수술 당일부터 가벼운 일상 생활이 가능하며 식사에도 제약이 없습니다. \n", "time": 4},
+                {"text": "다만, 과도한 운동이나 심하게 고개를 숙이는 자세 등은 삼가야 합니다.\n", "time": 11},
+                {"text": "- **세수와 샤워는 일주일 뒤부터 가능하며, 수영장이나 목욕탕 이용은 한달 뒤부터 가능합니다.**\n", "time": 17},
+                {"text": "\n", "time": 24}
+            ]
+            script3 = [
+                {"text": "#### Q. 백내장 수술 후에는 안약을 얼마나 사용하나요?  \n\n", "time": 0},
+                {"text": "- 일반적으로 수술 후에는 항생제, 항염증제 등 **안약을 1~2달간 사용**하게 됩니다.\n", "time": 4},
+                {"text": "- 회복 경과에 따라 안약을 더 오래 사용해야 하거나 추가해야 할 수 있습니다. \n", "time": 11},
+                {"text": "\n", "time": 16}
+            ]
+            script4 = [
+                {"text": "#### Q. 백내장 수술 후에는 병원에 얼마나 자주 와야하나요?  \n\n", "time": 0},
+                {"text": "- 특별한 문제가 없다면 수술일 기준 **다음날, 1주일, 1개월, 3-6개월 주기로 내원**하게 됩니다.\n", "time": 4},
+                {"text": "\n", "time": 13}
+            ]
+            scripts = [script1, script2, script3, script4]
+
+            full_text_container = st.empty()
+            full_text = ""
+            stream_text_container = st.empty()
+
+            for audio_file, script in zip(audio_files, scripts):
+                autoplay_audio(audio_file)
+                if stop_audio_btn3:
+                    st.session_state["speech_mode"] = False
+                    st.rerun()
+                    stop_audio()
+                start_time = time.time()
+                for item in script:
+                    while time.time() - start_time < item["time"]:
+                        time.sleep(0.1)
+                    
+                    for data in stream_partial_data([item]):
+                        if stop_audio_btn3:
+                            stop_audio()
+                            break
+                        stream_text_container.markdown(data, unsafe_allow_html=True)
+                    
+                    if stop_audio_btn3:
+                        stop_audio()
+                        break
+                    time.sleep(0.5)
+                    stream_text_container.empty()
+                    full_text += item["text"]
+                    full_text_container.markdown(full_text, unsafe_allow_html=True)
+
+                if stop_audio_btn3:
+                        stop_audio()
+                        break
+            stream_text_container.empty()
+            full_text_container.empty()
+        
         with st.container():
             st.subheader("단계 3) 백내장 수술 후 시력, 일상생활")
             
@@ -555,17 +629,110 @@ def page_info():
                 if st.button("듣기 중단", key='q3_4_stop', use_container_width=True):
                     stop_audio()
             
-            disable_step_3_again = True if st.session_state['progress'] > 3 else False
-            unlock_step_4 = st.button("확인하였습니다.", key="to_step_4", disabled=disable_step_3_again)
-            if unlock_step_4:
-                # st.session_state["step_4"] = True
-                # st.session_state["active_tab"] = "단계 4"
-                st.session_state['current_step'] = 4
-                st.session_state['progress'] += 1
-                st.rerun()
+            st.markdown('---')
+            down1, down2, down3 = st.columns([1, 1, 1.2])
+            with down1 :
+                disable_step_3_again = True if st.session_state['progress'] > 3 else False
+                unlock_step_4 = st.button("확인하였습니다.", type='primary', key="to_step_4", disabled=disable_step_3_again)
+                if unlock_step_4:
+                    # st.session_state["step_4"] = True
+                    # st.session_state["active_tab"] = "단계 4"
+                    st.session_state['current_step'] = 4
+                    st.session_state['progress'] += 1
+                    st.rerun()
+
+            with down3:
+                if st.button("전체 다시 듣기", use_container_width=True):
+                    st.session_state["speech_mode"] = True
+                    st.session_state["listen"]["step3"] = False
+                    st.rerun()
+
+
 
     # 단계 4) 백내장 수술의 부작용 및 합병증
     elif st.session_state['current_step'] == 4:
+        if "step4" not in st.session_state["listen"].keys():
+            st.session_state["listen"]["step4"] = False
+        
+        if st.session_state["speech_mode"] == True and st.session_state["listen"]["step4"] == False:
+            st.session_state["listen"]["step4"] = True
+            up, _ = st.columns([1,3])
+            with up:
+                stop_audio_btn4 = st.button("음성 모드 중지", key="up4", use_container_width=True)
+            
+            audio_files = ['./ref/contents/q4_1.mp3']
+            script1 = [
+                {"text": "#### Q. 백내장 수술의 부작용에는 어떤 것들이 있나요?  \n\n", "time": 0},
+                {"text": "- 백내장 수술의 부작용은 크게 '수술 중 합병증'과 '수술 후 부작용/합병증' 으로 나눌 수 있습니다.\n", "time": 5},
+                {"text": "1) 수술 중 합병증\n", "time": 13},
+                {"text": "- 백내장 수술 도중 발생할 수 있는 합병증은 여러가지가 있으나 ", "time": 16},
+                {"text": "가장 중요한 합병증은 **후낭파열** 과 **유리체 탈출**입니다.\n", "time": 18},
+                {"text": "- 백내장 수술과정의 약 5%에서 나타날 수 있는 합병증이며,", "time": 24},
+                {"text": " 특히 난도가 높은 백내장 수술에서 발생 확률이 증가합니다.\n", "time": 28},
+                {"text": "- 이러한 경우에는 유리체절제술이라는 추가 수술이 필요할 수 있으며,", "time": 35},
+                {"text": " 삽입되는 인공수정체의 종류나 위치가 달라질 수 있습니다.\n", "time": 39},
+                {"text": "2) 수술 후 경미한 부작용\n", "time": 44},
+                {"text": "- 경미한 수술 부작용으로는 **건조증, 이물감, 눈주변 불편감, 결막하출혈** 등이 있습니다.\n", "time": 48},
+                {"text": "- 건조증은 수술 후 일시적으로 악화될 수 있으나 대부분 시간이 지나면서 호전됩니다.  \n", "time": 56},
+                {"text": " 하지만 수술 전 건조증이 심했던 경우, 증상이 심해지거나 오랜 기간 지속될 수 있습니다.\n", "time": 63},
+                {"text": "- 결막하출혈은 자연스럽게 나타나며 2-4주 안에 자연소멸됩니다.\n", "time": 70},
+                {"text": "- **비문증(날파리증)** 또한 흔한 부작용 중 하나이며, 수술 이후 이로 인한 불편감이 나타날 수 있습니다.\n", "time": 75},
+                {"text": "3) 수술 후 심한 합병증\n", "time": 83},
+                {"text": "- 가장 심각한 부작용으로는 **수술 후 감염**이 있으며 1/1000 확률로 발생한다고 알려져 있습니다.\n", "time": 87},
+                {"text": "- 이를 예방하기 위하여 뒤에서 설명될 수술 후 주의사항을 반드시 숙지하시기 바랍니다. \n", "time": 94},
+                {"text": "- 수술 후 갑작스런 시력저하, 통증, 심한충혈 발생시, 감염의 초기 증상일 수 있으므로 즉시 내원하셔야 합니다.\n", "time": 101},
+                {"text": "- 수술 후 감염 발생시에는 반복적인 안구내주사 혹은 재수술 (유리체절제술)이 필요할 수 있습니다.\n", "time": 111},
+                {"text": "- 이외에도 백내장 수술 이후 안검하수, 복시, 망막박리 등의 합병증이 발생할 수 있습니다.\n", "time": 119},
+                {"text": "4) 수술 후 장기적인 합병증\n", "time": 127},
+                {"text": "- (1) **인공수정체의 탈구/아탈구**\n", "time": 130},
+                {"text": "+ 인공수정체가 기존의 위치에서 이탈되는 것을 뜻하며, 백내장 수술 이후 발생할 수 있는 장기적인 합병증 중 하나입니다.\n", "time": 134},
+                {"text": "+ 인공수정체를 지지해주는 역할을 하는 소대라는 구조가 약한 경우 발생할 가능성이 높습니다.\n", "time": 143},
+                {"text": "+ 인공수정체가 탈구/아탈구된 경우에는 재수술 (유리체절제술 및 이차적 인공수정체 삽입술)이 필요하게 됩니다.\n", "time": 151},
+                {"text": "- (2) **각막부종**\n", "time": 160},
+                {"text": "+ 수술 직후에도 일시적으로 발생할 수 있으나, 수술 전 각막내피세포가 좋지 않은 경우 각막부종이 오래 지속될 수 있습니다.\n", "time": 163},
+                {"text": "+ 각막부종이 장기간 지속되면 시력회복이 더딜 수 있으며, 호전되지 않는 경우에는 각막이식술이 필요할 수 있습니다.\n", "time": 172},
+                {"text": "- (3) **후낭혼탁**\n", "time": 180},
+                {"text": "+ 인공수정체가 들어있는 주머니 구조에 혼탁이 생기는 것으로, 후발백내장이라고도 합니다.\n", "time": 183},
+                {"text": "+ 이는 수술 이후에 자연스럽게 생길 수 있는 합병증으로 재수술이 아닌 간단한 ‘YAG 레이져 시술’을 통해 제거할 수 있습니다.\n", "time": 190},
+                {"text": "\n", "time": 197}
+            ]
+
+            scripts = [script1]
+            full_text_container = st.empty()
+            full_text = ""
+            stream_text_container = st.empty()
+            for audio_file, script in zip(audio_files, scripts):
+                autoplay_audio(audio_file)
+                if stop_audio_btn4:
+                    st.session_state["speech_mode"] = False
+                    st.rerun()
+                    stop_audio()
+                start_time = time.time()
+                for item in script:
+                    while time.time() - start_time < item["time"]:
+                        time.sleep(0.1)
+                    
+                    for data in stream_partial_data([item]):
+                        if stop_audio_btn4:
+                            stop_audio()
+                            break
+                        stream_text_container.markdown(data, unsafe_allow_html=True)
+                    
+                    if stop_audio_btn4:
+                        stop_audio()
+                        break
+                    time.sleep(0.5)
+                    stream_text_container.empty()
+                    full_text += item["text"]
+                    full_text_container.markdown(full_text, unsafe_allow_html=True)
+
+                if stop_audio_btn4:
+                        stop_audio()
+                        break
+            stream_text_container.empty()
+            full_text_container.empty()
+
+        
         with st.container():
             st.subheader("단계 4) 백내장 수술의 합병증과 부작용")
 
@@ -617,14 +784,25 @@ def page_info():
                 if st.button("듣기 중단", key='q4_1_stop', use_container_width=True):
                     stop_audio()
             
-            disable_step_4_again = True if st.session_state['progress'] > 4 else False
-            unlock_step_5 = st.button("확인하였습니다.", key="to_step_5", disabled=disable_step_4_again)
-            if unlock_step_5:
-                # st.session_state["step_5"] = True
-                # st.session_state["active_tab"] = "단계 5"
-                st.session_state['current_step'] = 5
-                st.session_state['progress'] += 1
-                st.rerun()
+            st.markdown('---')
+            down1, down2, down3 = st.columns([1, 1, 1.2])
+            with down1 :
+                disable_step_4_again = True if st.session_state['progress'] > 4 else False
+                unlock_step_5 = st.button("확인하였습니다.", type='primary', key="to_step_5", disabled=disable_step_4_again)
+                if unlock_step_5:
+                    # st.session_state["step_5"] = True
+                    # st.session_state["active_tab"] = "단계 5"
+                    st.session_state['current_step'] = 5
+                    st.session_state['progress'] += 1
+                    st.rerun()
+
+            with down3:
+                if st.button("전체 다시 듣기", use_container_width=True):
+                    st.session_state["speech_mode"] = True
+                    st.session_state["listen"]["step4"] = False
+                    st.rerun()
+
+
         
     ## 단계 5와 단계 6은 동시 활성화하고 순서 바꾸기
     # 단계 5) 자주 묻는 질문
