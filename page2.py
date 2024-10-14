@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 import pandas as pd
 from helper import supabase, diagnosis_draft, diagnosis_draft_2
 from collections import defaultdict
@@ -311,7 +311,7 @@ def input_patient_info():
         with col4_1:
             surgery_date = st.date_input("수술 날짜")
         with col4_2:
-            surgery_time = st.time_input("수술 시간", datetime.now().time())
+            surgery_time = st.time_input("수술 시간", time(7, 00), step=1800)
 
         # 폼 제출 버튼
         submitted = st.form_submit_button("환자 정보 등록")
