@@ -6,6 +6,7 @@ import base64
 from streamlit_calendar import calendar
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+from collections import defaultdict
 
 def autoplay_audio(file_path: str):
     with open(file_path, "rb") as f:
@@ -58,6 +59,8 @@ def page_info():
         st.session_state['current_step'] = 0
     if 'progress' not in st.session_state:
         st.session_state['progress'] = 0
+    if 'stay' not in st.session_state:
+        st.session_state['stay'] = defaultdict(int)
 
     step0_type = 'primary' if st.session_state['current_step'] == 0 else 'secondary'
     step1_type = 'primary' if st.session_state['current_step'] == 1 else 'secondary'
@@ -138,6 +141,9 @@ def page_info():
 
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
+        if st.session_state['progress'] == 1:
+            step1_start_time = time.time()
+
         if "step1" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step1"] = False
 
@@ -301,6 +307,7 @@ def page_info():
             if unlock_step_2:
                 st.session_state['current_step'] = 2
                 st.session_state['progress'] += 1
+                st.session_state['stay']["1"] = int(time.time() - step1_start_time)
                 st.rerun()
 
         with down3:

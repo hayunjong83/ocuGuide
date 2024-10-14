@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 from helper import supabase, diagnosis_draft, diagnosis_draft_2
+from collections import defaultdict
 
 # 환자 입력에 필요한 정보를 불러온다.
 @st.cache_resource(ttl=600)
@@ -139,6 +140,7 @@ def reset_info():
         # 페이지 3의 정보안내를 위한 설정
         st.session_state['current_step'] = 0
         st.session_state['progress'] = 0
+        st.session_state['stay'] = defaultdict(int)
         st.rerun()
 
 # 환자 정보 등록 과정
