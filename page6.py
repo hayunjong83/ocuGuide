@@ -71,7 +71,7 @@ def statistics():
                 # ax.set_xlabel('Steps')
                 ax.set_ylabel('Time (seconds)')
                 # ax.set_title('백내장수술정보 단계별 체류시간')
-                ax.set_xticklabels(steps, rotation=45)
+                # ax.set_xticklabels(steps, rotation=45)
 
                 st.pyplot(fig)
                 
