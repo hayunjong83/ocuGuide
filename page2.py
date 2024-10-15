@@ -2,7 +2,6 @@ import streamlit as st
 from datetime import datetime, timedelta, time
 import pandas as pd
 from helper import supabase, diagnosis_draft, diagnosis_draft_2
-from collections import defaultdict
 
 # 환자 입력에 필요한 정보를 불러온다.
 @st.cache_resource(ttl=600)
@@ -92,6 +91,7 @@ def page_input():
                 picked_info = pick_patient_info(info)
                 msg = {"role": "user", "content": picked_info}
                 explain = diagnosis_draft_2(msg)
+                explain = explain.replace("#","")
                 
                 st.session_state["patient_info"]["explain"] = explain
         else:
@@ -100,7 +100,6 @@ def page_input():
         st.success(' 환자정보가 등록되었습니다. 이제 :red[**백내장 수술정보**]로 이동하실 수 있습니다.', icon="✅")
         st.session_state["listen"] = dict()
     
-        explain = explain.replace("#","")
         st.markdown('---')
 
         down1, down2, down3 = st.columns([1, 1, 1.5])
@@ -140,7 +139,7 @@ def reset_info():
         # 페이지 3의 정보안내를 위한 설정
         st.session_state['current_step'] = 0
         st.session_state['progress'] = 0
-        st.session_state['stay'] = defaultdict(int)
+        st.session_state['stay'] = dict()
         st.rerun()
 
 # 환자 정보 등록 과정

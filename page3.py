@@ -6,7 +6,6 @@ import base64
 from streamlit_calendar import calendar
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from collections import defaultdict
 
 def autoplay_audio(file_path: str):
     with open(file_path, "rb") as f:
@@ -60,7 +59,7 @@ def page_info():
     if 'progress' not in st.session_state:
         st.session_state['progress'] = 0
     if 'stay' not in st.session_state:
-        st.session_state['stay'] = defaultdict(int)
+        st.session_state['stay'] = dict()
 
     step0_type = 'primary' if st.session_state['current_step'] == 0 else 'secondary'
     step1_type = 'primary' if st.session_state['current_step'] == 1 else 'secondary'
@@ -141,9 +140,11 @@ def page_info():
 
     # 단계 1) 백내장 및 백내장 수술
     elif st.session_state['current_step'] == 1:
-        if st.session_state['progress'] == 1:
-            step1_start_time = time.time()
-
+        if "step1" not in st.session_state['stay']:
+            st.session_state['stay']['step1'] = dict()
+            st.session_state['stay']['step1']['start'] = time.time()
+            # st.session_state['stay']['step1']['duration'] = 0
+        
         if "step1" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step1"] = False
 
@@ -307,7 +308,7 @@ def page_info():
             if unlock_step_2:
                 st.session_state['current_step'] = 2
                 st.session_state['progress'] += 1
-                st.session_state['stay']["1"] = int(time.time() - step1_start_time)
+                st.session_state['stay']["step1"]['duration'] = int(time.time() - st.session_state['stay']['step1']['start'])
                 st.rerun()
 
         with down3:
@@ -318,9 +319,14 @@ def page_info():
 
     # 단계 2) 백내장 수술에서 렌즈의 종류 및 도수
     elif st.session_state['current_step'] == 2:
+        if "step2" not in st.session_state['stay']:
+            st.session_state['stay']['step2'] = dict()
+            st.session_state['stay']['step2']['start'] = time.time()
+            # st.session_state['stay']['step2']['duration'] = 0
+
         if "step2" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step2"] = False
-
+        
         if st.session_state["speech_mode"] == True and st.session_state["listen"]["step2"] == False:
             st.session_state["listen"]["step2"] = True
             up, _ = st.columns([1,3])
@@ -432,6 +438,7 @@ def page_info():
                 if unlock_step_3:
                     st.session_state['current_step'] = 3
                     st.session_state['progress'] += 1
+                    st.session_state['stay']["step2"]['duration'] = int(time.time() - st.session_state['stay']['step2']['start'])
                     st.rerun()
 
             with down3:
@@ -442,6 +449,11 @@ def page_info():
 
     # 단계 3) 백내장 수술 후 시력, 일상생활
     elif st.session_state['current_step'] == 3:
+        if "step3" not in st.session_state['stay']:
+            st.session_state['stay']['step3'] = dict()
+            st.session_state['stay']['step3']['start'] = time.time()
+            # st.session_state['stay']['step3']['duration'] = 0
+
         if "step3" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step3"] = False
         
@@ -597,6 +609,7 @@ def page_info():
                 if unlock_step_4:
                     st.session_state['current_step'] = 4
                     st.session_state['progress'] += 1
+                    st.session_state['stay']["step3"]['duration'] = int(time.time() - st.session_state['stay']['step3']['start'])
                     st.rerun()
 
             with down3:
@@ -607,6 +620,11 @@ def page_info():
 
     # 단계 4) 백내장 수술의 부작용 및 합병증
     elif st.session_state['current_step'] == 4:
+        if "step4" not in st.session_state['stay']:
+            st.session_state['stay']['step4'] = dict()
+            st.session_state['stay']['step4']['start'] = time.time()
+            # st.session_state['stay']['step4']['duration'] = 0
+
         if "step4" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step4"] = False
         
@@ -748,6 +766,7 @@ def page_info():
                 if unlock_step_5:
                     st.session_state['current_step'] = 5
                     st.session_state['progress'] += 1
+                    st.session_state['stay']["step4"]['duration'] = int(time.time() - st.session_state['stay']['step4']['start'])
                     st.rerun()
 
             with down3:
@@ -758,6 +777,11 @@ def page_info():
 
     # 단계 5) 자주 묻는 질문
     elif st.session_state['current_step'] == 5:
+        if "step5" not in st.session_state['stay']:
+            st.session_state['stay']['step5'] = dict()
+            st.session_state['stay']['step5']['start'] = time.time()
+            # st.session_state['stay']['step5']['duration'] = 0
+
         if "step5" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step5"] = False
         
@@ -914,6 +938,7 @@ def page_info():
                 if unlock_step_6:
                     st.session_state['current_step'] = 6
                     st.session_state['progress'] += 1
+                    st.session_state['stay']["step5"]['duration'] = int(time.time() - st.session_state['stay']['step5']['start'])
                     st.rerun()
 
             with down3:
@@ -923,6 +948,11 @@ def page_info():
                     st.rerun()
                     
     elif st.session_state['current_step'] == 6:
+        if "step6" not in st.session_state['stay']:
+            st.session_state['stay']['step6'] = dict()
+            st.session_state['stay']['step6']['start'] = time.time()
+            # st.session_state['stay']['step6']['duration'] = 0
+
         if "step6" not in st.session_state["listen"].keys():
             st.session_state["listen"]["step6"] = False
         
@@ -1135,8 +1165,25 @@ def page_info():
             - **{month_after}**) **수술 한달 뒤** : 외래 내원 (수술 후 상태확인)
                 + 안약 중단
                 + 수술 후 도수 및 시력이 안정화되는 시기
-"""
+            """
             )
+            
+            st.markdown('---')
+            down1, down2, down3 = st.columns([1, 1, 1.2])
+            with down1 :
+                disable_step_6_again = True if st.session_state['progress'] > 6 else False
+                unlock_step_done = st.button("확인하였습니다.",type='primary', key="to_step_done", disabled=disable_step_6_again)
+                if unlock_step_done:
+                    st.session_state['current_step'] = 6
+                    st.session_state['progress'] += 1
+                    st.session_state['stay']["step6"]['duration'] = int(time.time() - st.session_state['stay']['step6']['start'])
+                    st.rerun()
+
+            with down3:
+                if st.button("전체 다시 듣기", use_container_width=True):
+                    st.session_state["speech_mode"] = True
+                    st.session_state["listen"]["step6"] = False
+                    st.rerun()
 
     
     st.markdown('---')
