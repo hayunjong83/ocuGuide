@@ -6,13 +6,14 @@ from audio_recorder_streamlit import audio_recorder
 import random
 import os
 import time
+from helper import autoplay_audio
 
 def stream_data(script):
     for word in script.split(" "):
         yield word + " "
         time.sleep(0.02)
 
-# @traceable
+@traceable
 def page_w_chatgpt():
     st.title("❔ Q&A 챗봇")
 
@@ -25,8 +26,10 @@ def page_w_chatgpt():
                     - 오른쪽의 마이크를 누르면, 음성으로 질문할 수 있습니다.
                     - 질문이 끝나신 후, 이제 곧 만나실 주치의에게 추가 설명을 들을 수 있습니다.
                     """)
+            autoplay_audio("./ref/contents/chat_guide.mp3")
         with c2:
-            audio_bytes = audio_recorder(text="음성모드", neutral_color="#6aa36f", icon_size="3x")
+            audio_bytes = audio_recorder(text="음성모드", neutral_color="#6aa36f", icon_size="4x")
+        
         # st.write("- :blue[**OcuGUIDE**]에서 궁금했던 내용을 무엇이든 물어보세요.  \n")
         # st.write("- 이해가 어려웠거나, 다시 듣고 싶으신 내용을 챗GPT 에이전트가 성심껏 답변드립니다.  \n")
         # st.write("- 질문이 끝나신 후, 이제 곧 만나실 주치의에게 추가 질문과 설명을 들을 수 있습니다.")
