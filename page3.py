@@ -980,7 +980,7 @@ def page_info():
             stream_text_container.empty()
             full_text_container.empty()
 
-        if not personalized:
+        if not personalized or 'patient_info' not in st.session_state or st.session_state['patient_info'] == None:
             st.error("회원정보를 먼저 등록해주십시오.")
 
         else:
