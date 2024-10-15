@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from page2 import style_dataframe
+import matplotlib.pyplot as plt
 
 def statistics():
     st.title("✨ OcuGUIDE 사용내역")
@@ -46,9 +47,41 @@ def statistics():
             st.warning("ℹ️ 백내장수술정보에서 필요한 정보 확인을 시작하세요.")
         else:
             progress = st.session_state["progress"]
-            if progress < 6:
+            if progress < 7:
                 st.info(f"현재 {progress}까지 정보를 확인하였습니다.")
             else:
                 st.success("모든 백내장수술정보를 확인하였습니다.")
 
-            st.write(st.session_state['stay'])
+                # st.write(st.session_state['stay'])
+                data = {'step(1)': st.session_state['stay']["step1"]['duration'], 
+                        'step(2)': st.session_state['stay']["step2"]['duration'], 
+                        'step(3)': st.session_state['stay']["step3"]['duration'], 
+                        'step(4)': st.session_state['stay']["step4"]['duration'], 
+                        'step(5)': st.session_state['stay']["step5"]['duration'], 
+                        'step(6)': st.session_state['stay']["step6"]['duration']
+                        }
+
+                steps = list(data.keys())
+                times = list(data.values())
+                
+                colors = ['blue', 'green', 'red', 'purple', 'orange', 'blue']
+
+                fig, ax = plt.subplots(figsize=(10, 6))
+                ax.bar(steps, times, color=colors)
+                # ax.set_xlabel('Steps')
+                ax.set_ylabel('Time (seconds)')
+                # ax.set_title('백내장수술정보 단계별 체류시간')
+                ax.set_xticklabels(steps, rotation=45)
+
+                st.pyplot(fig)
+                
+                st.write("##### 백내장 수술정보 단계별 체류시간(초) #####")
+                st.write(f""" 
+                         - :blue[**단계 1)**] 백내장의 정의, 수술 과정 : {data['step(1)']}초
+                         - :green[**단계 2)**] 인공수정체 결정 : {data['step(2)']}초
+                         - :red[**단계 3)**] 백내장 수술 후 시력, 일상생활 : {data['step(3)']}초
+                         - :violet[**단계 4)**] 백내장 수술의 합병증과 부작용 : {data['step(4)']}초
+                         - :orange[**단계 5)**] 빈번한 질문 리스트 : {data['step(5)']}초
+                         - :blue[**단계 6)**] 수술 후 주의사항 : {data['step(6)']}초
+
+                         """)
